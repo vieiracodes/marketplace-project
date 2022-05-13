@@ -1,0 +1,45 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.caixa_login{
+    color: white;
+    display: flex;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 400px;
+    width: 300px;
+    background-color: rgb(58, 58, 58);
+    border-radius: 20px;
+    box-shadow: 3px 4px 7px rgba(0, 0, 0, 0.356);
+}
+
+input{
+    border: 1px solid transparent;
+    margin: 5px 0px;
+    height: 25px;
+    border-radius: 5px;
+    padding: 3px;
+    text-align: center;
+    
+}
+
+button{
+    border-radius: 3px;
+    border: 1px solid transparent;
+    padding: 4px;
+    line-height: 15px;
+    margin: 5px 0;
+    background-color: #007bff;
+    color: white;
+}
