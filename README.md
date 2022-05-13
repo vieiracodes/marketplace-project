@@ -4,15 +4,24 @@ O projeto consiste em criar um site de um marketplace, totalmente funcional.
 Aqui segue uma lista de afazeres, para melhor organização e controle do projeto
 
 Cada afazer realizado, **por favor marque copie e cole o " ✔️ " na frente !!**
+Caso necessário, **coloque o icone " ⚠️ " na frente para definir prioridade**
 
 
 
 ## Front-End:
 
+  `<Identidade Visual> ⚠️`
+  
+      Criar uma logo para o marketplace
+      Criar um nome para o marketplace
+      Estabelecer uma paleta de cores 
+  
+  `</Identidade Visual>`
+
   `<pag_login> `
   
-     Criar o layout da pág de login
-     Criar o HTML e CSS da pág de login  
+     Criar o layout da pág de login 
+     Criar o HTML e CSS da pág de login  ✔️
      Criar animações e interatividade utilizando Js
     
   `</pag_login>`
