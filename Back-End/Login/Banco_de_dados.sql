@@ -6,4 +6,4 @@ Email varchar(40) not null unique,
 Senha varchar(30) not null
 );
 describe logins;
-select * from logins
+select * from logins;
