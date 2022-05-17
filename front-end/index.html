@@ -8,11 +8,14 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="caixa_login">
+    <form action="http://127.0.0.1:5000/login" method="post">
+      <div class="caixa_login">
         <h1>Login</h1>
         <input type="text" name="email" id="email" placeholder="Digite seu E-mail">
         <input type="password" name="password" id="password" placeholder="Insira a Senha">
-        <button id="prosseguir" name="prosseguir">Prosseguir</button>
-    </div>
+        <button type="submit" id="prosseguir" name="prosseguir">Prosseguir</button>
+
+      </div>
+    </form>
 </body>
 </html>
