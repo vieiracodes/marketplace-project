@@ -10,11 +10,11 @@ Caso necessário, **coloque o icone " ⚠️ " na frente para definir prioridade
 
 ## Front-End:
 
-  `<Identidade Visual> ⚠️`
+  `<Identidade Visual> ✔️`
   
-      Criar uma logo para o marketplace
-      Criar um nome para o marketplace
-      Estabelecer uma paleta de cores 
+      Criar uma logo para o marketplace ✔️
+      Criar um nome para o marketplace ✔️
+      Estabelecer uma paleta de cores ✔️
   
   `</Identidade Visual>`
 
@@ -28,7 +28,7 @@ Caso necessário, **coloque o icone " ⚠️ " na frente para definir prioridade
     
   `<pag_principal>`
   
-    Criar o layout da pág principal ✔️
+    Criar o layout da pág principal ✔️(?)
     Criar o HTML e CSS da pág principal
     Criar animações e interatividade utilizando Js
     
