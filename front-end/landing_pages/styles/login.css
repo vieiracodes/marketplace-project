@@ -23,7 +23,7 @@ body{
     flex-direction: column;
     height: 400px;
     width: 300px;
-    background-image: radial-gradient(circle at bottom left, #052166,#052166 0%, #27283a,#27283a 100% );
+    background-image: radial-gradient(circle at bottom left, #002685,#002685 0%, rgb(26, 45, 66) ,rgb(26, 45, 66) 100%);
     border-radius: 20px;
     box-shadow: 3px 4px 7px rgba(0, 0, 0, 0.356);
 }
