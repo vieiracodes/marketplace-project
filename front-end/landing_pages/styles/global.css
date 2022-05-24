@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,600;1,700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', 'sans-serif';
+}
+
+body{
+    background-color: #292929;
+    background-image: radial-gradient(circle at center, rgba(0, 162, 255, 0.2), rgba(255, 255, 255, 0)),
+                      radial-gradient(circle at bottom left, rgba(255, 0, 0, 0.112), rgba(255, 255, 255, 0) 40%),
+                      radial-gradient(circle at top right, rgba(255, 0, 0, 0.133), rgba(255, 255, 255, 0) 40%),
+                      radial-gradient(circle at bottom right, rgba(13, 3, 59, 0.2), rgba(255, 255, 255, 0)),
+                      radial-gradient(circle at top left, rgba(3, 9, 59, 0.2), rgba(255, 255, 255, 0));
+    background-attachment: fixed;
+}
+
+#menu_g-place{
+    position: fixed;
+    top: 0;
+    height: 20px;
+    width: 100%;
+}
+
+#menu_g-place ul{
+    color: white;
+    display: flex;
+    list-style: none;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgb(25, 38, 53);
+    padding: 5px 25px;
+    box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.3);
+}
+
+#barra_pesquisa{
+    width: 500px;
+    background-color: white;
+    height: 30px;
+    border: none;
+    border-radius: 10px 0px 0px 10px;
+    padding: 10px;
+    outline: none;
+}
+
+
+#barra_pesquisa_confirm{
+    background-color: rgb(104, 104, 104);
+    color: white;
+    height: 30px;
+    border: 1px solid transparent;
+    margin: 0;
+    border-radius: 0px 10px 10px 0px;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+.btns{
+    display: flex;
+}
+
+#login-btn, #car-btn{
+    color: white;
+    text-decoration: none;
+    height: 100%;
+    width: 50px;
+    padding: 15px;
+}
+
+#login-btn:hover, #car-btn:hover{
+    background-color: #007bff;
+}
+
+main{
+    margin-top: 85px;
+    color: white;
+}
