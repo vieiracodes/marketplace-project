@@ -18,12 +18,12 @@ function regis(){
         window.alert('Email Já cadastrado !')
     }
 
-    //Váriavel "email_Cadastrado" tem o intuito de ilustrar o funcionamento do IF e deve ser substituida pela váriavel correta
+    //Variável "email_Cadastrado" tem o intuito de ilustrar o funcionamento do IF e deve ser substituida pela váriavel correta
     if (email != email_Cadastrado){
         window.alert('Email Inválido !')
     }
 
-    //Váriavel "senha_Cadastrada" tem o intuito de ilustrar o funcionamento do IF e deve ser substituida pela váriavel correta
+    //Variável "senha_Cadastrada" tem o intuito de ilustrar o funcionamento do IF e deve ser substituida pela váriavel correta
     if (senha != senha_Cadastrada){
         window.alert('Senha Inválida !')
     }
