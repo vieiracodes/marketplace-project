@@ -3,7 +3,7 @@
 #-------------------------------<Configurações>--------------------------------#
 #O python atuará como um programa serverside
 from flask import Flask, request
-from flask import redirect, url_for, render_template
+from flask import redirect, url_for, render_template, flash
 import psycopg2
 # import mysql.connector #comunicação com o banco de dados
 # from mysql.connector import errors
@@ -14,6 +14,7 @@ import psycopg2
 
 #Criação de uma instância do Flask
 app = Flask(__name__)
+app.secret_key = 'insert_secret_key'
 
 
 #Conexão com o banco de dados
@@ -28,13 +29,22 @@ def conectar_banco(platform="PostgreSQL"):
           password="Py_auth",
           database="marketplace"
         )
-    #Para PostgreSQL (Usado na plataforma Heroku)
-    elif(platform == 'PostgreSQL'):
+    #Para PostgreSQL (Local)
+    elif(platform == 'PostgreSQL1'):
         comms = psycopg2.connect(
             host="localhost",
             user="postgres",
-            password="Pi3!4159",
+            password="INSERIR SENHA",
             database="postgres"
+        )
+
+    #Para PostgreSQL (Usado na plataforma Heroku)
+    elif(platform == 'PostgreSQL'):
+        comms = psycopg2.connect(
+            host="ec2-52-3-2-245.compute-1.amazonaws.com",
+            user="ojkcyslsolzjxw",
+            password="de7fdc90c23fbfa7c949ff0b22cb8c55f8e7130c249da36863a9818fb07871f9",
+            database="de7bgah134l4lf"
         )
 
     return comms
@@ -44,74 +54,106 @@ def conectar_banco(platform="PostgreSQL"):
 #--------------------------------<Autenticação>--------------------------------#
 
 #Função da página de cadastro
-@app.route('/cadastro', methods = ['POST'])
+@app.route('/cadastro', methods = ['GET','POST'])
 def cadastro():
     comms = conectar_banco()
     cursor = comms.cursor()
+
+
     #Recupera os dados do input html
     if(request.method == 'POST'):
         User = request.form['email']
         Senha = request.form['password']
         User_data = (User, Senha)
 
-    try:
-    #Insere os dados no MySQL por meio dos comandos
-        add_User = 'INSERT INTO logins (Email, Senha) VALUES (%s, %s)'
-        cursor.execute(add_User, User_data)
-        comms.commit()
-        #return redirect(url_for('teste', User=User, Senha=Senha))
-        return f'Cadastro feito Bem vindo, {User}. Sua senha {Senha}'
+        try:
+        #Insere os dados no MySQL por meio dos comandos
+            add_User = 'INSERT INTO logins (Email, Senha) VALUES (%s, %s)'
+            cursor.execute(add_User, User_data)
+            comms.commit()
+        #inserir o valor perfil no HTML (será mostrado o usuário no canto)
 
-    # except mysql.connector.errors.IntegrityError:
-    #     return 'Usuário já existe! Tente outro email'
-    #
-    # except mysql.connector.errors.OperationalError:
-    #     return f'Erro no servidor: {User} e {Senha}'
+            flash('Cadastro concluído!')
+            return redirect(url_for('home'))#, perfil=User))
+            
+        # except mysql.connector.errors.IntegrityError:
+        #     return redirect(url_for('error', error='Usuário já existe! Tente outro email'))
+        #
+        # except mysql.connector.errors.OperationalError:
+        #     return redirect(url_for('error', error='Erro no servidor'))
 
-    except psycopg2.errors.UniqueViolation:
-            return f'Usuário já existe! Tente outro email'
+        except psycopg2.errors.UniqueViolation:
 
-    finally:
-        #encerra a comunicação com o banco de dados independente do resultado
-        comms.close()
+            return redirect(url_for('error', error='Usuário já existe! Tente outro email'))
+            #    return f'Usuário já existe! Tente outro email'
+
+        finally:
+            #encerra a comunicação com o banco de dados independente do resultado
+            comms.close()
+    else:
+        return render_template('cadastro.html')
+
 
 
 #Ler dados de usuário no banco de dados
-@app.route('/login', methods = ['POST'])
+@app.route('/login', methods = ['GET', 'POST'])
 def login():
-    comms = conectar_banco()
-    cursor = comms.cursor()
+
     if(request.method == 'POST'):
+        comms = conectar_banco()
+        cursor = comms.cursor()
         User = request.form['email']
         Senha = request.form['password']
+        print(f"Usuário: {User} Senha: {Senha}")
+
         #verificar se o login e senha estão no banco de dados
         get_user = f"""SELECT Email, Senha FROM logins
          WHERE Email = '{User}' AND Senha = '{Senha}'"""
 
+
         try:
             cursor.execute(get_user)
             Auth_tokens = cursor.fetchone()
-            #print(Auth_tokens)
+
             #se os valores existirem, são retornados
-            return f"""<h2> Usuário: {Auth_tokens[0]} </h2>
-             <h2> Senha: {Auth_tokens[1]}</h2>"""
+            if(Auth_tokens != None):
+                flash('Login concluído!')
+                return redirect(url_for('home'))
+
+            else:
+                return redirect(url_for('error', error='Usuário não encontrado!'))
+
+            #enviar um popup
+                #return redirect(url_for('login'))
 
         #se não existirem (TypeError pois retorna um Nonetype)
         except TypeError:
+            return redirect(url_for('error', error='Usuário não encontrado'))
 
-            #retorna a mensagem abaixo
-            return 'Usuário não encontrado'
 
         #encerra a comunicação com o banco de dados independente do resultado
         finally:
 
             comms.close()
 
+    else:
+        return render_template('login.html')
+
+#página de erro customizada no futuro (se der)
+@app.route('/error', methods = ['GET', 'POST'])
+def error():
+
+    try:
+        error = request.args['error']
+    except:
+        error = 'O erro deu erro :D'
+
+    return render_template('error.html', error=error)
 
 
 #--------------------------------<Marketplace>---------------------------------#
-@app.route('/', methods = ['POST'])
-def market():
+@app.route('/', methods = ['GET', 'POST'])
+def home():
     #comms = conectar_banco()
     #cursor = comms.cursor()
         #Elementos que podem ser enviados ao banco de dados:
@@ -120,10 +162,29 @@ def market():
             #Fotos (Caminho das imagens, talvez)
             #Estado do anúncio (aberto, encerrado)
 
-    return 'Página do Marketplace: Não implementada ainda'
+
+    if(request.method == 'POST'):
+        if(request.form['janela'] == 'Login'):
+            return redirect(url_for('login'))
+        elif(request.form['janela'] == 'Cadastro'):
+            return redirect(url_for('cadastro'))
+        elif(request.form['janela'] == 'Deletar'):
+            return redirect(url_for('delete'))
+        elif(request.form['janela'] == 'Forum'):
+            return redirect(url_for('forum'))
+
+    #
+    # try:
+    #     status = request.args['status']
+    # except:
+    #     status = 'Página Inicial'
+    return render_template('index.html')
+    #return 'Página do Marketplace: Não implementada ainda'
+
+
 
 #-----------------------------------<Fórum>------------------------------------#
-@app.route('/forum', methods = ['POST'])
+@app.route('/forum', methods = ['GET', 'POST'])
 def forum():
     #comms = conectar_banco()
     #cursor = comms.cursor()
@@ -182,7 +243,7 @@ def teste():
 
 
 
-#Processo para que o aplicativo seja exportado e executado ao clicar no botão HTMl
+#Processo para que o aplicativo seja executado como um site
 
 if (__name__ == '__main__'):
     app.run(debug= True)
