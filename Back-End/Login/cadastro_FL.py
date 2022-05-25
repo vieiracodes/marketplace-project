@@ -149,7 +149,7 @@ def cadastro():
             #encerra a comunicação com o banco de dados independente do resultado
             db.comms.close()
     else:
-        return render_template('cadastro.html')
+        return render_template('landing_pages/html/cadastro.html')
 
 
 
@@ -160,32 +160,33 @@ def login():
     if(request.method == 'POST'):
         email = request.form['email']
         Senha = request.form['password']
-
+        print('login')
 
         try:
             Auth_tokens = db.verificar_user(email)
+            print(f'Auth_tokens: {Auth_tokens}')
 
             #se os valores existirem, são retornados
             if(Auth_tokens != None):
                 Senha_hash = check_password_hash(Auth_tokens[1], Senha)
-
-
-
-
                 if(Senha_hash == True):
                     User_token = User()
                     User_token.id = email
                     login_user(User_token, remember=lembra_user)
-
+                    print('oi!')
+                    print(f'\n current_user: {User_token.id} \n')
                     flash('Login concluído!')
+                    #print(request.form['prosseguir'])
                     return redirect(url_for('home'))
 
                 else:
+                    print('passou aqui')
                     flash('Senha incorreta!')
                     return redirect(url_for('login'))
 
             #se Auth_tokens == None
             else:
+                print('tá no else')
                 return redirect(url_for('error', error='Usuário não encontrado no banco!'))
 
 
@@ -195,6 +196,7 @@ def login():
 
         #se não existirem (TypeError pois retorna um Nonetype)
         except TypeError:
+            print('tá no except')
             return redirect(url_for('error', error='Usuário não encontrado'))
                 #enviar um popup
                     # flash('Usuário não encontrado!')
@@ -207,13 +209,15 @@ def login():
             db.comms.close()
 
     else:
-        return render_template('login.html')
+        return render_template('landing_pages/html/login.html')
 
 @app.route('/logout', methods = ['GET','POST'])
 def logout():
     logout_user()
     flash('Conta desconectada com sucesso!')
     return redirect(url_for('home'))
+
+
 
 #página de erro customizada no futuro (se der)
 @app.route('/error', methods = ['GET', 'POST'])
@@ -240,16 +244,18 @@ def home():
 
 
     if(request.method == 'POST'):
-        if(request.form['janela'] == 'Login'):
-            return redirect(url_for('login'))
-        elif(request.form['janela'] == 'Cadastro'):
-            return redirect(url_for('cadastro'))
-        elif(request.form['janela'] == 'Deletar'):
-            return redirect(url_for('delete'))
-        elif(request.form['janela'] == 'Forum'):
-            return redirect(url_for('forum'))
+        print(request.form['prosseguir'])
+        #
+        # if(request.form['janela'] == 'Login'):
+        #     return redirect(url_for('login'))
+        # elif(request.form['janela'] == 'Cadastro'):
+        #     return redirect(url_for('cadastro'))
+        # elif(request.form['janela'] == 'Deletar'):
+        #     return redirect(url_for('delete'))
+        # elif(request.form['janela'] == 'Forum'):
+        #     return redirect(url_for('forum'))
 
-    return render_template('landing_pages\html\home.html')
+    return render_template('landing_pages/html/home.html')
     #return 'Página do Marketplace: Não implementada ainda'
 
 
