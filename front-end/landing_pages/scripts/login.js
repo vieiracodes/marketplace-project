@@ -12,4 +12,19 @@ function regis(){
     var email = emailHtml.value
 
     cadastro = `E-mail: ${email} \nSenha: ${senha}`
+
+    //A função "emailRegistrado" tem o intuito de ilustrar o funcionamento do IF e deve ser substituida pela função correta
+    if (emailRegistrado().jaRegistrado){
+        window.alert('Email Já cadastrado !')
+    }
+
+    //Váriavel "email_Cadastrado" tem o intuito de ilustrar o funcionamento do IF e deve ser substituida pela váriavel correta
+    if (email != email_Cadastrado){
+        window.alert('Email Inválido !')
+    }
+
+    //Váriavel "senha_Cadastrada" tem o intuito de ilustrar o funcionamento do IF e deve ser substituida pela váriavel correta
+    if (senha != senha_Cadastrada){
+        window.alert('Senha Inválida !')
+    }
 }
