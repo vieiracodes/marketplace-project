@@ -10,14 +10,26 @@
     <link rel="stylesheet" href="static/styles/global.css">
 </head>
 <body>
-  <form action="/" method="post">
-    <div class="caixa_login">
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class=flashes>
+        {% for message in messages %}
+        <div colour="green" role="alert">
+          {{ message }}
+        </div>
+        {% endfor %}
+        </ul>
+    {% endif %}
+  {% endwith %}
+    <form action="/login" method="post">
+      <div class="caixa_login">
         <h1>Login</h1>
         <input type="text" name="email" id="email" placeholder="Digite seu E-mail">
         <input type="password" name="password" id="password" placeholder="Insira a Senha">
         <button type="submit" id="prosseguir" name="prosseguir">Prosseguir</button>
-    </div>
-  </form>
-    <script src="static/scripts/login.js"></script>
+        <!-- <script src="static/scripts/login.js"></script> -->
+      </div>
+    </form>
+
 </body>
 </html>
