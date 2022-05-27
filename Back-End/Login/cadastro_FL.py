@@ -32,7 +32,7 @@ class User(UserMixin):
 
 class Banco_de_dados():
     def __init__(self):
-        self.Auth_tokens = []
+        self.Auth_tokens = None
 
     #Conexão com o banco de dados
     def conectar_banco(self, platform="PostgreSQL"):
@@ -54,9 +54,13 @@ class Banco_de_dados():
         cursor = self.comms.cursor()
         get_user = f"""SELECT Email, Senha, id FROM logins
         WHERE Email = '{email}'"""
-        cursor.execute(get_user)
-        self.Auth_tokens = cursor.fetchone()
-        return self.Auth_tokens
+        try:
+            cursor.execute(get_user)
+            self.Auth_tokens = cursor.fetchone()
+            return self.Auth_tokens
+        except TypeError:
+            print('levantou a exceção interna')
+            return None
 
 
 
@@ -101,8 +105,9 @@ db = Banco_de_dados()
 
 @login_manager.user_loader
 def user_loader(email):
-    if email not in db.Auth_tokens:
-        return
+    if(db.Auth_tokens != None):
+        if email not in db.Auth_tokens:
+            return
 
     User_token = User()
     User_token.id = email
@@ -112,8 +117,9 @@ def user_loader(email):
 @login_manager.request_loader
 def request_loader(request):
     email = request.form.get('email')
-    if email not in db.Auth_tokens:
-        return
+    if(db.Auth_tokens != None):
+        if email not in db.Auth_tokens:
+            return
 
     User_token = User()
     User_token.id = email
@@ -160,33 +166,28 @@ def login():
     if(request.method == 'POST'):
         email = request.form['email']
         Senha = request.form['password']
-        print('login')
 
+        Auth_tokens = db.verificar_user(email)
+        print(Auth_tokens)
         try:
-            Auth_tokens = db.verificar_user(email)
-            print(f'Auth_tokens: {Auth_tokens}')
-
             #se os valores existirem, são retornados
             if(Auth_tokens != None):
                 Senha_hash = check_password_hash(Auth_tokens[1], Senha)
+
                 if(Senha_hash == True):
                     User_token = User()
                     User_token.id = email
                     login_user(User_token, remember=lembra_user)
-                    print('oi!')
-                    print(f'\n current_user: {User_token.id} \n')
+
                     flash('Login concluído!')
-                    #print(request.form['prosseguir'])
                     return redirect(url_for('home'))
 
                 else:
-                    print('passou aqui')
                     flash('Senha incorreta!')
                     return redirect(url_for('login'))
 
             #se Auth_tokens == None
             else:
-                print('tá no else')
                 return redirect(url_for('error', error='Usuário não encontrado no banco!'))
 
 
@@ -196,7 +197,7 @@ def login():
 
         #se não existirem (TypeError pois retorna um Nonetype)
         except TypeError:
-            print('tá no except')
+            print('levantou a exceção externa')
             return redirect(url_for('error', error='Usuário não encontrado'))
                 #enviar um popup
                     # flash('Usuário não encontrado!')
@@ -216,8 +217,6 @@ def logout():
     logout_user()
     flash('Conta desconectada com sucesso!')
     return redirect(url_for('home'))
-
-
 
 #página de erro customizada no futuro (se der)
 @app.route('/error', methods = ['GET', 'POST'])
@@ -244,16 +243,14 @@ def home():
 
 
     if(request.method == 'POST'):
-        print(request.form['prosseguir'])
-        #
-        # if(request.form['janela'] == 'Login'):
-        #     return redirect(url_for('login'))
-        # elif(request.form['janela'] == 'Cadastro'):
-        #     return redirect(url_for('cadastro'))
-        # elif(request.form['janela'] == 'Deletar'):
-        #     return redirect(url_for('delete'))
-        # elif(request.form['janela'] == 'Forum'):
-        #     return redirect(url_for('forum'))
+        if(request.form['janela'] == 'Login'):
+            return redirect(url_for('login'))
+        elif(request.form['janela'] == 'Cadastro'):
+            return redirect(url_for('cadastro'))
+        elif(request.form['janela'] == 'Deletar'):
+            return redirect(url_for('delete'))
+        elif(request.form['janela'] == 'Forum'):
+            return redirect(url_for('forum'))
 
     return render_template('landing_pages/html/home.html')
     #return 'Página do Marketplace: Não implementada ainda'
@@ -271,6 +268,9 @@ def forum():
         #Respostas
         #Estado do 'post'/pergunta(aberto, encerrado)
         #Usuários que publicaram perguntas e respostas
+
+        #verificar autorização do usuário (se pode postar ou responder)
+        #Usar o current_user.is_authenticated
 
     return 'Página do Fórum: Não implementada ainda'
 
