@@ -9,19 +9,34 @@
     <link rel="shortcut icon" href="static/sources/images/global/g-place.ico" type="image/x-icon">
 </head>
 <body>
+<!-- Teste - Código Jinja para exibição de status do login -->
+  <!-- {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class=flashes>
+        {% for message in messages %}
+        <div colour="green" role="alert">
+          {{ message }}
+        </div>
+        {% endfor %}
+        </ul>
+    {% endif %}
+  {% endwith %} -->
+
     <header>
         <nav id="menu_g-place">
             <ul>
-                <li><a href="home.html"><img src="static/sources/images/global/g_place-logo.png" alt="Gamers_Place-logo" draggable="false" id="logo"></a></li>
-                <li><input type="text" id="barra_pesquisa"><button id="barra_pesquisa_confirm">P</button></li>
+                <li><a href="home"><img src="static/sources/images/global/g_place-logo.png" alt="Gamers_Place-logo" draggable="false" id="logo"></a></li>
+                <li><input type="text" class="campo" id="barra_pesquisa" oninput="autoComplete()"><button id="barra_pesquisa_confirm">P</button></li>
+
                 <div class="btns">
                     <li><a href="" id="car-btn">Carrinho</a></li>
-                    <li><a>
+                    <!-- Código Jinja para mostrar o usuário logado -->
+                    <!-- <li><a>
                       {% if current_user.is_authenticated %}
                       Olá, {{ current_user.id }}!
                       {% else %}
                       Olá, Visitante!
-                      {% endif %}</a></li>
+                      {% endif %}</a></li> -->
                     <li><a href="login" id="login-btn" target="_blank">Login</a></li>
                 </div>
             </ul>

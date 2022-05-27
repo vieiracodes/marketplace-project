@@ -1,3 +1,4 @@
+/*----------------------------------<Slider>----------------------------------*/
 //Mapear botões
 var btn_go_slide = document.getElementById('slideRight');
 var btn_back_slide = document.getElementById('slideLeft')
@@ -41,22 +42,22 @@ function passaDireita(){
             continue
         }
     }
-   
+
     if (count == 1){
         passaSlide = 1570
         image1.checked=true
-        
+
     }
 
     if (count == 2){
         passaSlide = 530
         image2.checked=true
-        
+
     }
     if (count == 3){
         image3.checked=true
         passaSlide = -509
-        
+
     }
     if (count == 4){
         image4.checked=true
@@ -65,7 +66,7 @@ function passaDireita(){
     }
 
     slide1.style.marginLeft = `${passaSlide}px`
-    
+
 }
 
 function passaEsquerda(){
@@ -84,7 +85,7 @@ function passaEsquerda(){
             continue
         }
     }
-   
+
     if (count == 1){
         passaSlide = 1570
         image1.checked=true
@@ -132,4 +133,43 @@ function slide03(){
 function slide04(){
     count = 3
     passaDireita()
+}
+/*-------------------------------<AutoComplete>-------------------------------*/
+
+// Autocomplete da barra de pesquisa
+function autoComplete() {
+
+// Importação de "bibliotecas para funcionamento do autoComplete"
+  const head = document.head || document.getElementsByTagName('head')[0]
+  const styles = ["http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"];
+  const scripts = [
+      "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js",
+      "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"];
+
+    // Criando o estilo que será necessário para executar o autocomplete
+    for(let i in styles){
+      let style = document.createElement("link")
+      style.rel = "stylesheet"
+      style.type = "text/css"
+      style.href = styles[i]
+      head.appendChild(style)
+    }
+
+    // Criando os estilos que serão necessários para executar o autocomplete
+    for(let i in scripts){
+      let script = document.createElement("script")
+      script.src = scripts[i]
+      script.type = "text/javascript";
+      head.appendChild(script)
+    }
+
+//Execução da função de autoComplete
+$( function() {
+  //sugests será o que aparecerá como recomendação de autocomplete
+  var sugests = ['PS4', 'PS3', 'PlayStation4', 'PlayStation3', 'PlayStation',
+  'Xbox One', 'Xbox360', 'Xbox', 'Switch', 'Nintendo Switch', 'Nintendo', '3DS',
+  'Nintendo 3DS'];
+  $( "#barra_pesquisa" ).autocomplete({
+    source: sugests });
+  });
 }
