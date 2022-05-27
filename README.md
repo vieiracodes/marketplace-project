@@ -8,11 +8,11 @@ Caso necessário, **coloque o icone " ⚠️ " na frente para definir prioridade
 
 ## Site no geral:
   `Hospedagem `
-      Pesquisar servidores (se gratuitos, melhor)
-      Devem possuir suporte a banco de dados e back-end python
+      Pesquisar servidores (se gratuitos, melhor) ✔️
+      Devem possuir suporte a banco de dados e back-end python✔️
         Algumas Opções:
         -Vercel
-        -Heruko
+        -Heroku ✔️
         -InfinityFree
 
 
@@ -61,7 +61,23 @@ Caso necessário, **coloque o icone " ⚠️ " na frente para definir prioridade
 
   `def pag_principal()` {
 
-    Criar um sistema onde, quando o usuário digitar algo na barra de pesquisa, apareça sugestões antes mesmo dele apertar o botão de busca
+    Criar um sistema onde, quando o usuário digitar algo na barra de pesquisa, apareça sugestões antes mesmo dele apertar o botão de busca ✔️
+
+    `def market()` {
+
+      Criar sistema de carrinho (adição de itens, verificação do carrinho)
+      Criar sistema de "conclusão da compra" (simulação da compra)
+    }
+  }
+
+  `def forum()` {
+
+    Criar sistema para abertura de posts
+    Criar sistema para postagem de comentários (resposta a posts)
+    Criar sistema para exibir status do post (aberto, fechado, redundante)
+    Criar sistema para exibir usuários que publicaram as perguntas e respostas
+    Sistema de permissões para publicar e responder posts
+
   }
 
 */// Esse documento pode ser editado por qualquer um dos usuários, tanto para confirmar afazeres já feitos, quanto para adicionar novos afazeres.*
