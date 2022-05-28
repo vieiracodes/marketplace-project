@@ -8,12 +8,12 @@
 }
 
 body{
-    background-color: #292929;
-    background-image: radial-gradient(circle at center, rgba(0, 162, 255, 0.2), rgba(255, 255, 255, 0)),
-                      radial-gradient(circle at bottom left, rgba(255, 0, 0, 0.112), rgba(255, 255, 255, 0) 40%),
-                      radial-gradient(circle at top right, rgba(255, 0, 0, 0.133), rgba(255, 255, 255, 0) 40%),
-                      radial-gradient(circle at bottom right, rgba(13, 3, 59, 0.2), rgba(255, 255, 255, 0)),
-                      radial-gradient(circle at top left, rgba(3, 9, 59, 0.2), rgba(255, 255, 255, 0));
+    background-color: #1d1d1d;
+    background-image: radial-gradient(circle at center, rgba(0, 162, 255, 0.096), rgba(255, 255, 255, 0)),
+                      radial-gradient(circle at bottom left, rgba(255, 0, 0, 0.048), rgba(255, 255, 255, 0) 40%),
+                      radial-gradient(circle at top right, rgba(255, 0, 0, 0.055), rgba(255, 255, 255, 0) 40%),
+                      radial-gradient(circle at bottom right, rgba(13, 3, 59, 0.103), rgba(255, 255, 255, 0)),
+                      radial-gradient(circle at top left, rgba(3, 9, 59, 0.11), rgba(255, 255, 255, 0));
     background-attachment: fixed;
 }
 
@@ -77,4 +77,9 @@ body{
 main{
     margin-top: 85px;
     color: white;
+}
+
+.sub-titulo{
+    font-weight: 600;
+    font-size: 30px;
 }

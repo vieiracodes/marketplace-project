@@ -1,24 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,600;1,700&display=swap');
-
 *{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Open Sans', 'sans-serif';
-}
-
-body{
-    background-color: #292929;
-    background-image: radial-gradient(circle at center, rgba(0, 162, 255, 0.2), rgba(255, 255, 255, 0)),
-                      radial-gradient(circle at bottom left, rgba(255, 0, 0, 0.112), rgba(255, 255, 255, 0) 40%),
-                      radial-gradient(circle at top right, rgba(255, 0, 0, 0.133), rgba(255, 255, 255, 0) 40%),
-                      radial-gradient(circle at bottom right, rgba(13, 3, 59, 0.2), rgba(255, 255, 255, 0)),
-                      radial-gradient(circle at top left, rgba(3, 9, 59, 0.2), rgba(255, 255, 255, 0));
-    background-attachment: fixed;
+    --largContainers: 1100px;
+    --largSlide_Atual: 690px;
+    --autSlide_Atual: 400px;
 }
 
 #menu_g-place{
     position: fixed;
+    z-index: 1;
     top: 0;
     width: 100%;
 }
@@ -74,6 +62,7 @@ body{
     height: 100%;
     width: 50px;
     padding: 15px;
+    transition: 0.5s;
 }
 
 #login-btn:hover, #car-btn:hover{
@@ -91,19 +80,18 @@ main{
 }
 
 .container_destaques p{
-    font-weight: 600;
     margin: 0px 100px;
-    font-size: 30px;
 }
 
 .destaques {
+    position: initial;
     display: flex;
     overflow-x: hidden;
     align-items: center;
     justify-content: center;
     user-select: none;
-    margin: 0 auto;
-    width: 1100px;
+    margin: 0 auto 55px auto;
+    width: var(--largContainers);
     height: 425px;
 }
 
@@ -112,6 +100,7 @@ main{
     width: 690px;
     height: 400px;
     object-fit: cover;
+    box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.685);
     transition: 0.5s;
 }
 
@@ -124,12 +113,12 @@ main{
     filter: blur(3px);
     width: 500px;
     height: 300px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.685);
     transition: 0.5s;
 }
 .slides, .slideatual{
     margin: 10px;
     border: 3px solid white;
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.26);
     object-fit: cover;
     cursor: pointer;
 }
@@ -141,17 +130,17 @@ main{
     margin: auto;
     display: flex;
     position: absolute;
-    width: 690px;
-    justify-content: space-between;
     
 }
 #slideLeft, #slideRight{
+    width: 40px;
     padding: 10px 15px;
     outline: none;
     background-color: white;
     border: none;
     box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.466);
     cursor: pointer;
+    transition: 0.3s;
 }
 #slideLeft:hover, #slideRight:hover{
     color: white;
@@ -160,9 +149,11 @@ main{
 }
 #slideRight{
     border-radius: 20px 0px 0px 20px;
+    transform:translateX(calc(var(--largSlide_Atual) / 2 - 40px));
 }
 #slideLeft{
     border-radius: 0px 20px 20px 0px;
+    transform:translateX(calc(var(--largSlide_Atual) * -0.5 + 40px));
 }
 
 #slider_input{
@@ -170,33 +161,169 @@ main{
     position: absolute;
     margin: 0 auto;
     align-items: flex-end;
-    height: 350px;
+    transform: translateY(calc(var(--autSlide_Atual) / 2 - 38px));
     width: 600px;
     justify-content: space-evenly;
+    transition: 0.5s;
 }
 
-#slider_input input{
-    opacity: 0;
-    height: 25px;
-    width: 25px;
-    cursor: pointer;
+.slide_selector_checked{
+    background-color: rgb(255, 255, 255) !important;
+    border: 2px solid #0084ff !important;
+    transition: 0.5s;
+    height: 28px !important;
+    width: 28px !important;
+    margin-bottom: 5px;
 }
 
-.slide_selector{
+.slide_selector, .slide_selector_checked{
     cursor: pointer;
     height: 25px;
     width: 25px;
     border-radius: 30px;
-    border: 2px solid rgb(0, 0, 0);
-    background-color: rgba(255, 255, 255, 0.445);
+    border: 2px solid rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0.301);
+    box-shadow: 0px 0px 6px rgb(0, 0, 0);
+    transition: 0.5s;
 }
 
 .slide_selector:hover{
-    background-color: #39f8ff;
+    background-color: #0084ff;
     transition: 0.5s;
 
 }
 
-input[type="radio"]:checked + label{
-    background-color: black;
+
+.categoria1 .sub-titulo{
+    margin: 0px 80px 30px 80px;
+}
+
+.categoria1{
+    margin: 20px 0px;
+}
+
+.container_fotos_categoria1{
+    display: flex;
+    margin: 0 auto;
+    color: black;
+    display: flex;
+    height: 340px;
+    width: var(--largContainers);
+    overflow-x: scroll;
+}
+
+.container_fotos_categoria1::-webkit-scrollbar{
+    display: none;
+}
+
+/*.teste{
+    display: flex;
+    position: absolute;
+    height: 300px;
+    z-index: 0;
+    align-items: center;
+    justify-content: flex-end;
+    transform: translateX(calc(var(--largContainers) - 20px));
+
+}*/
+
+.foto_cat1{
+    display: flex;
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    flex-direction: column;
+    text-align: center;
+    height: 250px;
+    width: 230px;
+    border: 3px solid white;
+    border-radius: 5px;
+    margin: 0px 10px;
+    padding: 0px 10px;
+    background-color: rgb(255, 255, 255);
+    transition: 0.5s;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.575);
+}
+
+.foto_cat1 .sub-titulo{
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    margin: 10px 0px;
+    font-size: 22px;
+}
+
+.resumo{
+    display: none;
+}
+
+.foto_cat1:hover .resumo{
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.img_cat1{
+    object-fit: contain;
+    user-select: none;
+    margin: 0 auto;
+    height: 150px;
+    width: 150px;
+    transition: 0.5s;
+}
+
+.preco{
+    display: inline-block;
+    font-weight: 600;
+    font-size: 20px;
+    margin: 5px 0px;
+    transition: 0.5s;
+}
+
+.preco::before{
+    content: "R$ ";
+}
+
+.foto_cat1:hover .img_cat1{
+    height: 180px;
+    width: 180px;
+}
+.foto_cat1:hover{
+    height: 340px;
+}
+.foto_cat1:hover .preco{
+    display: block;
+    font-size: 20px;
+}
+.xbox_Product .preco{
+    color: green;
+}
+.xbox_Product:hover{
+    border: 3px solid green !important;
+    border-radius: 5px !important;
+}
+.ps_Product .preco{
+    color: #007bff;
+}
+.ps_Product:hover{
+    border: 3px solid #007bff !important;
+    border-radius: 5px !important;
+}
+
+.nin_Product:hover{
+    border: 3px solid rgb(252, 0, 0) !important;
+    border-radius: 5px !important;
+}
+
+footer{
+    font-size: 18px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(29, 29, 29);
+    padding: 30px;
+    text-align: center;
+    height: 180px;
 }

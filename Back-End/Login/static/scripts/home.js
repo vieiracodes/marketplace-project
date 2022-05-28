@@ -17,7 +17,6 @@ var image1 = document.getElementById('radio1')
 var image2 = document.getElementById('radio2')
 var image3 = document.getElementById('radio3')
 var image4 = document.getElementById('radio4')
-image1.checked=true
 
 //pular para X slide
 image1.addEventListener('click', slide01)
@@ -25,6 +24,11 @@ image2.addEventListener('click', slide02)
 image3.addEventListener('click', slide03)
 image4.addEventListener('click', slide04)
 
+var teste = document.getElementsByClassName('container_fotos_categoria1')[0]
+teste.addEventListener('wheel', (evt) => {
+    evt.preventDefault();
+    teste.scrollLeft += evt.deltaY;
+})
 
 //Funcionamento do slider
 function passaDireita(){
@@ -34,10 +38,14 @@ function passaDireita(){
     }
     var theSlide = document.getElementsByName('img0'+count)[0]
     theSlide.className = "slideatual";
+    var slide_checker = document.getElementById('radio'+count)
+    slide_checker.className = "slide_selector_checked"
     for (var c=1; c<=4; c++){
         if (c != count){
-        var nullSlide = document.getElementsByName('img0'+c)[0]
-        nullSlide.className = 'slides'
+            var slide_nullCheck = document.getElementById('radio'+c)
+            slide_nullCheck.className = "slide_selector"
+            var nullSlide = document.getElementsByName('img0'+c)[0]
+            nullSlide.className = 'slides'
         } else{
             continue
         }
@@ -45,22 +53,18 @@ function passaDireita(){
 
     if (count == 1){
         passaSlide = 1570
-        image1.checked=true
 
     }
 
     if (count == 2){
         passaSlide = 530
-        image2.checked=true
 
     }
     if (count == 3){
-        image3.checked=true
-        passaSlide = -509
+        passaSlide = -510
 
     }
     if (count == 4){
-        image4.checked=true
         passaSlide = -1550
 
     }
@@ -77,10 +81,14 @@ function passaEsquerda(){
     var theSlide = document.getElementsByName('img0'+count)[0]
     theSlide.className = "slideatual";var theSlide = document.getElementsByName('img0'+count)[0]
     theSlide.className = "slideatual";
+    var slide_checker = document.getElementById('radio'+count)
+    slide_checker.className = "slide_selector_checked"
     for (var c=1; c<=4; c++){
         if (c != count){
-        var nullSlide = document.getElementsByName('img0'+c)[0]
-        nullSlide.className = 'slides'
+            var slide_nullCheck = document.getElementById('radio'+c)
+            slide_nullCheck.className = "slide_selector"
+            var nullSlide = document.getElementsByName('img0'+c)[0]
+            nullSlide.className = 'slides'
         } else{
             continue
         }
@@ -97,7 +105,7 @@ function passaEsquerda(){
     }
     if (count == 3){
         image3.checked=true
-        passaSlide = -509
+        passaSlide = -510
     }
     if (count == 4){
         image4.checked=true
@@ -114,7 +122,6 @@ function passaEsquerda(){
 //Ir para o 1° slide
 function slide01(){
     count = 0
-    image1.style.backgroundColor = 'blue'
     passaDireita()
 }
 
