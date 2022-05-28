@@ -20,16 +20,16 @@ Caso necessário, **coloque o icone " ⚠️ " na frente para definir prioridade
 
   `<Identidade Visual> ⚠️`
 
-      Criar uma logo para o marketplace
-      Criar um nome para o marketplace
-      Estabelecer uma paleta de cores
+      Criar uma logo para o marketplace ✔️
+      Criar um nome para o marketplace ✔️
+      Estabelecer uma paleta de cores ✔️
 
   `</Identidade Visual>`
 
   `<pag_login> `
 
-     Criar o layout da pág de login
-     Criar o HTML e CSS da pág de login  ✔️
+     Criar o layout da pág de login✔️
+     Criar o HTML e CSS da pág de login ✔️
      Criar animações e interatividade utilizando Js
 
   `</pag_login>`
@@ -37,8 +37,8 @@ Caso necessário, **coloque o icone " ⚠️ " na frente para definir prioridade
   `<pag_principal>`
 
     Criar o layout da pág principal ✔️
-    Criar o HTML e CSS da pág principal
-    Criar animações e interatividade utilizando Js
+    Criar o HTML e CSS da pág principal ✔️
+    Criar animações e interatividade utilizando Js ✔️
 
   `</pag_principal>`
 
