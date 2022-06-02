@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro</title>
+    <title>Verificar email</title>
     <link rel="shortcut icon" href="static/sources/images/global/g-place.ico" type="image/x-icon">
     <link rel="stylesheet" href="static/styles/login.css">
     <link rel="stylesheet" href="static/styles/global.css">
@@ -23,10 +23,9 @@
   {% endwith %}
   <form action="/cadastro" method="post">
     <div class="caixa_login">
-        <h1 class="sub-titulo">Cadastrar</h1>
-        <input type="text" name="email" id="email" placeholder="Digite seu E-mail">
-        <input type="password" name="password" id="password" placeholder="Insira a Senha">
-        <button type="submit" id="prosseguir" name="prosseguir">Cadastrar</button>
+        <h1 class="sub-titulo">Verificar Email</h1>
+        <input type="text" name="email_code" id="email_code" placeholder="Digite o código enviado ao seu E-mail">
+        <button type="submit" id="prosseguir" name="verify_code" value = "verify_code">Verificar código</button>
     </div>
     </form>
     <!-- <script src="../scripts/login.js"></script> -->

@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>protected</title>
-     <link rel="stylesheet" href="static/css/style.css" />
+     <link rel="stylesheet" href="static/styles/login.css" />
 
     </head>
     <body>
@@ -24,12 +24,13 @@
       {% endwith %}
         <form action="/" method="post">
           <div class="caixa_login">
-            <h1>Página Inicial - Teste</h1>
-            <h2>
+
+            <h1 class="sub-titulo">Autenticação - Teste</h1>
+            <h2 class="sub-titulo">
               {% if current_user.is_authenticated %}
-                  Hi {{ current_user.id }}!
+                  Olá {{ current_user.id }}!
               {% else %}
-                  Hi Visitante!
+                  Olá Visitante!
               {% endif %}
             </h2>
 

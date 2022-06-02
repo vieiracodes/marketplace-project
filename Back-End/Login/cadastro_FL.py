@@ -7,14 +7,18 @@ from flask import redirect, url_for, render_template, flash
 from flask_login import (LoginManager,UserMixin, login_user, logout_user,
  current_user, login_required,)
 from werkzeug.security import generate_password_hash, check_password_hash
-# from User_config import User_class
+
 from flask import jsonify
 import psycopg2
+from random import seed, randint
+import werkzeug.exceptions
 # import mysql.connector #comunicação com o banco de dados
 # from mysql.connector import errors
 
 #Importação de variáveis de ambiente e outras configurações, caso necessário
-
+is_validation = None
+verify_code = ''
+User_data = None
 
 
 #Criação de uma instância do Flask
@@ -132,29 +136,62 @@ def request_loader(request):
 #Função da página de cadastro
 @app.route('/cadastro', methods = ['GET','POST'])
 def cadastro():
-
+    # a função reseta sempre que a pagina recarrega.
+    # ver um modo mais eficiente de persistir o status da página e o código da
+    # validação para a próxima etapa
+    print('is validation resetou')
+    global is_validation
+    global verify_code
+    global User_data
+    print(f'mas o valor de validation é: {is_validation}')
     #Recupera os dados do input html
     if(request.method == 'POST'):
-        email = request.form['email']
-        Senha = generate_password_hash(request.form['password'], method ='sha256')
+        # try:
+        #     is_validation = request.args['isvalidation']
+        # except:
+        #     is_validation = None
+        if(is_validation == None):
 
-        #Senha = request.form['password']
-        User_data = (email, Senha)
+            email = request.form['email']
+            Senha = generate_password_hash(request.form['password'], method ='sha256')
+            for i in range(4):
+                verify_code+=str(randint(0, 9))
+            print(f'Código: {verify_code}')
+            User_data = (email, Senha)
+            # User_data = ('email', 'Senha')
+            is_validation = 'email_verify'
+            print(is_validation)
+            return render_template('landing_pages/html/email_verify.html')
 
-        try:
-            db.inserir_user(User_data)
+        elif(is_validation == 'email_verify'):
+            email_code = request.form['email_code']
+            if(request.form['verify_code'] == 'verify_code'):
+                print(f'is_validation2: {is_validation}')
+                if(email_code == verify_code):
+                    try:
+                        db.inserir_user(User_data)
 
-            #inserir o valor perfil no HTML (será mostrado o usuário no canto)
-            flash('Cadastro concluído!')
-            return redirect(url_for('home'))
+                        #inserir o valor perfil no HTML (será mostrado o usuário no canto)
+                        flash('Cadastro concluído!')
+                        return redirect(url_for('home'))
 
-        except psycopg2.errors.UniqueViolation:
-            return redirect(url_for('error', error='Usuário já existe! Tente outro email'))
+                    except psycopg2.errors.UniqueViolation:
+                        return redirect(url_for('error', error='Usuário já existe! Tente outro email'))
 
-        finally:
-            #encerra a comunicação com o banco de dados independente do resultado
-            db.comms.close()
+                    finally:
+                        #encerra a comunicação com o banco de dados independente do resultado
+                        print('aqui deu finally')
+                        print(f'is_validation3: {is_validation}')
+                        db.comms.close()
+                        is_validation = None
+                else:
+                    print('Código inválido')
+                    return redirect(url_for('error', error='Código inválido!'))
+                    # return redirect(url_for('cadastro'))
+        else:
+            return '21'
     else:
+
         return render_template('landing_pages/html/cadastro.html')
 
 
@@ -164,6 +201,7 @@ def cadastro():
 def login():
     lembra_user = False
     if(request.method == 'POST'):
+
         email = request.form['email']
         Senha = request.form['password']
 
