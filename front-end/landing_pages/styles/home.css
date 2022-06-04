@@ -4,83 +4,12 @@
     --autSlide_Atual: 400px;
 }
 
-#menu_g-place{
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    width: 100%;
+#exclusivosVoid{
+    display: none;
 }
 
-#menu_g-place ul{
-    color: white;
-    display: flex;
-    height: 60px;
-    list-style: none;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    background-color: rgb(25, 38, 53);
-    padding: 10px 30px;
-    box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.3);
-}
-
-#logo{
-    margin-top: 9px;
-    width: 140px;
-}
-
-#barra_pesquisa{
-    width: 500px;
-    background-color: white;
-    height: 30px;
-    border: none;
-    border-radius: 10px 0px 0px 10px;
-    padding: 10px;
-    outline: none;
-}
-
-
-#barra_pesquisa_confirm{
-    background-color: rgb(104, 104, 104);
-    color: white;
-    height: 30px;
-    border: 1px solid transparent;
-    margin: 0;
-    border-radius: 0px 10px 10px 0px;
-    padding: 0 10px;
-    cursor: pointer;
-}
-
-.btns{
-    display: flex;
-}
-
-#login-btn, #car-btn{
-    margin: 0px 5px;
-    color: white;
-    text-decoration: none;
-    height: 100%;
-    width: 50px;
-    padding: 15px;
-    transition: 0.5s;
-}
-
-#login-btn:hover, #car-btn:hover{
-    background-color: #007bff;
-}
-
-main{
-    margin-top: 85px;
-    color: white;
-}
-
-#slideatual{
-    align-items: center;
-    cursor: pointer;
-}
-
-.container_destaques p{
-    margin: 0px 100px;
+.container_destaques{
+    margin-top: 80px;
 }
 
 .destaques {
@@ -109,6 +38,10 @@ main{
     height: 100%;
 }
 
+.destaques a{
+    transition: 0.5s;
+}
+
 .slides{
     filter: blur(3px);
     width: 500px;
@@ -116,32 +49,31 @@ main{
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.685);
     transition: 0.5s;
 }
+
 .slides, .slideatual{
     margin: 10px;
     border: 3px solid white;
     object-fit: cover;
-    cursor: pointer;
+    transition: 0.5s;
 }
 
 #passaSlide{
-    margin-left: 1570px;
+    margin-left: 1560px;
 }
-#sliders{
-    margin: auto;
-    display: flex;
-    position: absolute;
-    
-}
+
 #slideLeft, #slideRight{
+    position: absolute;
     width: 40px;
     padding: 10px 15px;
-    outline: none;
     background-color: white;
     border: none;
     box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.466);
     cursor: pointer;
+    font-size: 16px;
     transition: 0.3s;
+    opacity: 1;
 }
+
 #slideLeft:hover, #slideRight:hover{
     color: white;
     background-color: #007bff;
@@ -149,11 +81,11 @@ main{
 }
 #slideRight{
     border-radius: 20px 0px 0px 20px;
-    transform:translateX(calc(var(--largSlide_Atual) / 2 - 40px));
+    transform:translateX(calc(var(--largSlide_Atual) / 2 - 20px));
 }
 #slideLeft{
     border-radius: 0px 20px 20px 0px;
-    transform:translateX(calc(var(--largSlide_Atual) * -0.5 + 40px));
+    transform:translateX(calc(var(--largSlide_Atual) * -0.5 + 20px));
 }
 
 #slider_input{
@@ -194,17 +126,13 @@ main{
 }
 
 
-.categoria1 .sub-titulo{
+.titulo{
     margin: 0px 80px 30px 80px;
 }
 
-.categoria1{
-    margin: 20px 0px;
-}
-
-.container_fotos_categoria1{
+.container_produtos{
     display: flex;
-    margin: 0 auto;
+    margin: 20px auto;
     color: black;
     display: flex;
     height: 340px;
@@ -212,22 +140,11 @@ main{
     overflow-x: scroll;
 }
 
-.container_fotos_categoria1::-webkit-scrollbar{
+.container_produtos::-webkit-scrollbar{
     display: none;
 }
 
-/*.teste{
-    display: flex;
-    position: absolute;
-    height: 300px;
-    z-index: 0;
-    align-items: center;
-    justify-content: flex-end;
-    transform: translateX(calc(var(--largContainers) - 20px));
-
-}*/
-
-.foto_cat1{
+.produto{
     display: flex;
     scroll-snap-align: start;
     flex-shrink: 0;
@@ -244,7 +161,7 @@ main{
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.575);
 }
 
-.foto_cat1 .sub-titulo{
+.nome-produto{
     display: -webkit-box;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -252,22 +169,25 @@ main{
     -webkit-box-orient: vertical;
     margin: 10px 0px;
     font-size: 22px;
+    font-weight: 500;
 }
 
 .resumo{
     display: none;
 }
 
-.foto_cat1:hover .resumo{
+.produto:hover .resumo{
     display: -webkit-box;
     overflow: hidden;
+    height: 60px;
+    width: 200px;
     font-size: 14px;
     text-overflow: ellipsis;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
 }
 
-.img_cat1{
+.img_produto{
     object-fit: contain;
     user-select: none;
     margin: 0 auto;
@@ -288,42 +208,39 @@ main{
     content: "R$ ";
 }
 
-.foto_cat1:hover .img_cat1{
+.produto:hover .img_produto{
     height: 180px;
     width: 180px;
 }
-.foto_cat1:hover{
+.produto:hover{
     height: 340px;
+    border: 3px solid rgba(15, 87, 145, 0.678);
 }
-.foto_cat1:hover .preco{
+.produto:hover .preco{
     display: block;
     font-size: 20px;
 }
-.xbox_Product .preco{
+.exclusivos_Xbox .preco{
     color: green;
 }
-.xbox_Product:hover{
+.exclusivos_Xbox:hover{
     border: 3px solid green !important;
     border-radius: 5px !important;
 }
-.ps_Product .preco{
+
+.exclusivos_Ps:first-child{
+    display: none;
+}
+
+.exclusivos_Ps .preco{
     color: #007bff;
 }
-.ps_Product:hover{
+.exclusivos_Ps:hover{
     border: 3px solid #007bff !important;
     border-radius: 5px !important;
 }
 
-.nin_Product:hover{
+.exclusivos_Nin:hover{
     border: 3px solid rgb(252, 0, 0) !important;
     border-radius: 5px !important;
-}
-
-footer{
-    font-size: 18px;
-    color: rgb(255, 255, 255);
-    background-color: rgb(29, 29, 29);
-    padding: 30px;
-    text-align: center;
-    height: 180px;
 }

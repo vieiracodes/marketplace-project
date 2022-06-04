@@ -1,13 +1,30 @@
+const c = (el)=>document.querySelector(el);
+const cs = (el)=>document.querySelectorAll(el);
+
+produtosJson.map((item, index)=>{
+    let produtosItem = c('#exclusivosVoid .produto').cloneNode(true);
+    produtosItem.querySelector('.nome-produto').innerHTML = item.name;
+    produtosItem.querySelector('.preco').innerHTML = item.price[0].toFixed(2);
+    produtosItem.querySelector('.resumo').innerHTML = item.description;
+    produtosItem.querySelector('.img_produto').src = item.img
+    if (item.exclusive != null){
+        produtosItem.classList.add(item.exclusive)
+        c(`#${item.exclusive} .container_produtos`).append(produtosItem);
+    } else {
+        c('#outros .container_produtos').append(produtosItem);
+    }
+});
+
 //Mapear botões
 var btn_go_slide = document.getElementById('slideRight');
-var btn_back_slide = document.getElementById('slideLeft')
+var btn_back_slide = document.getElementById('slideLeft');
 
 //Chamar funções do botão
-btn_back_slide.addEventListener('click', passaEsquerda)
+btn_back_slide.addEventListener('click', passaEsquerda);
 btn_go_slide.addEventListener('click', passaDireita);
 
 //Variaveis para o slider funcionar
-var slide1 = document.getElementsByName('img01')[0]
+var slide1 = document.getElementById('passaSlide')
 var passaSlide = 1550
 var count = 1;
 
@@ -23,15 +40,17 @@ image2.addEventListener('click', slide02)
 image3.addEventListener('click', slide03)
 image4.addEventListener('click', slide04)
 
-var teste = document.getElementsByClassName('container_fotos_categoria1')[0]
-teste.addEventListener('wheel', (evt) => {
-    evt.preventDefault();
-    teste.scrollLeft += evt.deltaY;
-})
-
 //Funcionamento do slider
 function passaDireita(){
     count += 1;
+
+    btn_go_slide.style.opacity = "0"
+    btn_back_slide.style.opacity = '0'
+    setTimeout(()=>{
+        btn_back_slide.style.opacity = '1'
+        btn_go_slide.style.opacity = '1'
+    }, 390)
+
     if (count > 4){
         count = 1
     }
@@ -51,20 +70,20 @@ function passaDireita(){
     }
    
     if (count == 1){
-        passaSlide = 1570
+        passaSlide = 1560
         
     }
 
     if (count == 2){
-        passaSlide = 530
+        passaSlide = 520
         
     }
     if (count == 3){
-        passaSlide = -510
+        passaSlide = -520
         
     }
     if (count == 4){
-        passaSlide = -1550
+        passaSlide = -1560
 
     }
 
@@ -74,6 +93,14 @@ function passaDireita(){
 
 function passaEsquerda(){
     count -= 1
+
+    btn_go_slide.style.opacity = "0"
+    btn_back_slide.style.opacity = '0'
+    setTimeout(()=>{
+        btn_back_slide.style.opacity = '1'
+        btn_go_slide.style.opacity = '1'
+    }, 390)
+
     if (count == 0){
         count = 4
     }
@@ -94,21 +121,21 @@ function passaEsquerda(){
     }
    
     if (count == 1){
-        passaSlide = 1570
+        passaSlide = 1560
         image1.checked=true
     }
 
     if (count == 2){
-        passaSlide = 530
+        passaSlide = 520
         image2.checked=true
     }
     if (count == 3){
         image3.checked=true
-        passaSlide = -510
+        passaSlide = -520
     }
     if (count == 4){
         image4.checked=true
-        passaSlide = -1550
+        passaSlide = -1560
     }
 
     slide1.style.marginLeft = `${passaSlide}px`

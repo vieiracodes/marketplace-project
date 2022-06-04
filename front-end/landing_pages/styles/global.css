@@ -9,7 +9,7 @@
 
 body{
     background-color: #1d1d1d;
-    background-image: radial-gradient(circle at center, rgba(0, 162, 255, 0.096), rgba(255, 255, 255, 0)),
+    background-image: radial-gradient(circle at center, #00a2ff18, rgba(255, 255, 255, 0)),
                       radial-gradient(circle at bottom left, rgba(255, 0, 0, 0.048), rgba(255, 255, 255, 0) 40%),
                       radial-gradient(circle at top right, rgba(255, 0, 0, 0.055), rgba(255, 255, 255, 0) 40%),
                       radial-gradient(circle at bottom right, rgba(13, 3, 59, 0.103), rgba(255, 255, 255, 0)),
@@ -17,23 +17,34 @@ body{
     background-attachment: fixed;
 }
 
+a{
+    text-decoration: none;
+    color: black;
+}
+
 #menu_g-place{
     position: fixed;
+    z-index: 1;
     top: 0;
-    height: 20px;
     width: 100%;
 }
 
 #menu_g-place ul{
     color: white;
     display: flex;
+    height: 60px;
     list-style: none;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    background-color: rgb(25, 38, 53);
-    padding: 5px 25px;
+    background-color: #192635;
+    padding: 10px 30px;
     box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.3);
+}
+
+#logo{
+    margin-top: 9px;
+    width: 140px;
 }
 
 #barra_pesquisa{
@@ -63,11 +74,13 @@ body{
 }
 
 #login-btn, #car-btn{
+    margin: 0px 5px;
     color: white;
     text-decoration: none;
     height: 100%;
     width: 50px;
     padding: 15px;
+    transition: 0.5s;
 }
 
 #login-btn:hover, #car-btn:hover{
@@ -75,11 +88,22 @@ body{
 }
 
 main{
-    margin-top: 85px;
-    color: white;
+    min-height: 800px;
+    margin-top: 70px;
+    color: rgb(255, 255, 255);
 }
 
-.sub-titulo{
+.titulo{
     font-weight: 600;
     font-size: 30px;
+}
+
+
+footer{
+    font-size: 18px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(29, 29, 29);
+    padding: 30px;
+    text-align: center;
+    height: 180px;
 }
