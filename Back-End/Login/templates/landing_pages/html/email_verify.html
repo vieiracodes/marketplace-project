@@ -24,7 +24,12 @@
   <form action="/cadastro" method="post">
     <div class="caixa_login">
         <h1 class="sub-titulo">Verificar Email</h1>
-        <input type="text" name="email_code" id="email_code" placeholder="Digite o código enviado ao seu E-mail">
+        <input type="text" name="email_code" id="email_code" maxlength="4" 
+        size="4" placeholder="Digite o código enviado ao seu E-mail">
+        <!-- <input type="number" name="email_code1" maxlength="1" size="1" id="email_code1">
+        <input type="number" name="email_code2" maxlength="1" size="1" id="email_code2">
+        <input type="number" name="email_code3" maxlength="1" size="1" id="email_code3">
+        <input type="number" name="email_code4" maxlength="1" size="1" id="email_code4"> -->
         <button type="submit" id="prosseguir" name="verify_code" value = "verify_code">Verificar código</button>
     </div>
     </form>

@@ -5,9 +5,9 @@
 from flask import Flask, request
 from flask import redirect, url_for, render_template, flash
 from flask_login import (LoginManager,UserMixin, login_user, logout_user,
- current_user, login_required,)
+ current_user, login_required)
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from flask_mail import Mail, Message
 from flask import jsonify
 import psycopg2
 from random import seed, randint
@@ -20,16 +20,27 @@ is_validation = None
 verify_code = ''
 User_data = None
 
+Config_email = {
+"MAIL_SERVER": 'smtp.gmail.com',
+"MAIL_PORT": 465,
+"MAIL_USE_TLS": False,
+"MAIL_USE_SSL": True,
+"MAIL_USERNAME": 'emailverify.gamesplace@gmail.com',
+"MAIL_PASSWORD": 'ocfqpzwspsaypngi',
+"MAIL_DEFAULT_SENDER": 'emailverify.gamesplace@gmail.com'
+}
+
 
 #Criação de uma instância do Flask
 app = Flask(__name__)
 app.secret_key = 'insert_secret_key'
 login_manager = LoginManager()
 login_manager.__init__(app)
-login_manager.login_view = 'login'
-login_manager.login_message = 'Precisa logar, bro'
-login_manager.login_message_category = "info"
-
+# login_manager.login_view = 'login'
+# login_manager.login_message = 'Precisa logar, bro'
+# login_manager.login_message_category = "info"
+app.config.update(Config_email)
+mail = Mail(app)
 
 class User(UserMixin):
     pass
@@ -139,11 +150,11 @@ def cadastro():
     # a função reseta sempre que a pagina recarrega.
     # ver um modo mais eficiente de persistir o status da página e o código da
     # validação para a próxima etapa
-    print('is validation resetou')
+    #print('is validation resetou')
     global is_validation
     global verify_code
     global User_data
-    print(f'mas o valor de validation é: {is_validation}')
+    #print(f'mas o valor de validation é: {is_validation}')
     #Recupera os dados do input html
     if(request.method == 'POST'):
         # try:
@@ -154,44 +165,65 @@ def cadastro():
 
             email = request.form['email']
             Senha = generate_password_hash(request.form['password'], method ='sha256')
-            for i in range(4):
-                verify_code+=str(randint(0, 9))
-            print(f'Código: {verify_code}')
-            User_data = (email, Senha)
-            # User_data = ('email', 'Senha')
-            is_validation = 'email_verify'
-            print(is_validation)
-            return render_template('landing_pages/html/email_verify.html')
+            email_exists = db.verificar_user(email)
+            if(not email_exists):
+                for i in range(4):
+                    verify_code+=str(randint(0, 9))
+                print(f'Código: {verify_code}')
+
+                msg = Message(
+                subject= 'Verificação de email - Gamesplace',
+                recipients=[email, "emailverify.gamesplace@gmail.com"],
+                html= render_template('landing_pages/html/corpo_email.html', verify_code=verify_code)
+                )
+                mail.send(msg)
+
+                User_data = (email, Senha)
+
+                is_validation = 'email_verify'
+                #print(is_validation)
+                return render_template('landing_pages/html/email_verify.html')
+            else:
+                return redirect(url_for('error', error='Usuário já existe! Tente outro email'))
 
         elif(is_validation == 'email_verify'):
-            email_code = request.form['email_code']
-            if(request.form['verify_code'] == 'verify_code'):
-                print(f'is_validation2: {is_validation}')
-                if(email_code == verify_code):
-                    try:
-                        db.inserir_user(User_data)
+            try:
+                email_code = request.form['email_code']
+                if(request.form['verify_code'] == 'verify_code'):
+                    print(f'is_validation2: {is_validation}')
+                    if(email_code == verify_code):
+                        # print(f'v_c(1): {verify_code[1]}')
+                        try:
+                            db.inserir_user(User_data)
 
-                        #inserir o valor perfil no HTML (será mostrado o usuário no canto)
-                        flash('Cadastro concluído!')
-                        return redirect(url_for('home'))
+                            #inserir o valor perfil no HTML (será mostrado o usuário no canto)
+                            flash('Cadastro concluído!')
+                            return redirect(url_for('home'))
 
-                    except psycopg2.errors.UniqueViolation:
-                        return redirect(url_for('error', error='Usuário já existe! Tente outro email'))
+                        except psycopg2.errors.UniqueViolation:
+                            return redirect(url_for('error', error='Usuário já existe! Tente outro email'))
 
-                    finally:
-                        #encerra a comunicação com o banco de dados independente do resultado
-                        print('aqui deu finally')
-                        print(f'is_validation3: {is_validation}')
-                        db.comms.close()
-                        is_validation = None
-                else:
-                    print('Código inválido')
-                    return redirect(url_for('error', error='Código inválido!'))
-                    # return redirect(url_for('cadastro'))
+                        finally:
+                            #encerra a comunicação com o banco de dados independente do resultado
+                            print('aqui deu finally')
+                            print(f'is_validation3: {is_validation}')
+                            db.comms.close()
+                            verify_code = ''
+                            is_validation = None
+
+                    else:
+                        print('Código inválido')
+                        return redirect(url_for('error', error='Código inválido!'))
+                        # return redirect(url_for('cadastro'))
+            except werkzeug.exceptions.BadRequestKeyError:
+                return redirect(url_for('error', error='Página recarregada!'))
+
         else:
             return '21'
     else:
-
+        is_validation = None
+        verify_code = ''
+        User_data = None
         return render_template('landing_pages/html/cadastro.html')
 
 
@@ -206,7 +238,7 @@ def login():
         Senha = request.form['password']
 
         Auth_tokens = db.verificar_user(email)
-        print(Auth_tokens)
+        #print(Auth_tokens)
         try:
             #se os valores existirem, são retornados
             if(Auth_tokens != None):
@@ -235,7 +267,7 @@ def login():
 
         #se não existirem (TypeError pois retorna um Nonetype)
         except TypeError:
-            print('levantou a exceção externa')
+            #print('levantou a exceção externa')
             return redirect(url_for('error', error='Usuário não encontrado'))
                 #enviar um popup
                     # flash('Usuário não encontrado!')
@@ -328,8 +360,9 @@ def delete():
 @app.route('/teste', methods = ['POST', 'GET'])
 # @login_required
 def teste():
-    print(current_user)
-    print(current_user.is_authenticated)
+    print(f'current_user: {current_user}')
+    print(f'current_user.id: {current_user.id}')
+    print(f'current_user.is_authenticated: {current_user.is_authenticated}')
     return render_template('teste_login.html')
     # comms = conectar_banco()
     # cursor = comms.cursor()
