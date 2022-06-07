@@ -26,7 +26,7 @@
   <header>
       <nav id="menu_g-place">
           <ul>
-              <li><a href="home.html"><img src="static/sources/images/global/g_place-logo.png" alt="Gamers_Place-logo" draggable="false" id="logo"></a></li>
+              <li><a href="/"><img src="static/sources/images/global/g_place-logo.png" alt="Gamers_Place-logo" draggable="false" id="logo"></a></li>
               <li><input type="text" class="campo" id="barra_pesquisa" oninput="autoComplete()"><button id="barra_pesquisa_confirm">P</button></li>
               <div class="btns">
                     <li><a href="" id="car-btn">Carrinho</a></li>
@@ -37,7 +37,17 @@
                       {% else %}
                       Olá, Visitante!
                       {% endif %}</a></li> -->
-                      <li><a href="login" id="login-btn" target="_blank">Login</a></li>
+                      <li><a href="
+                        {% if (current_user.id != None and current_user.is_authenticated) %}
+                        logout
+                        {% else %}
+                        login
+                        {% endif %}" id="login-btn" target="_blank">
+                      {% if (current_user.id != None and current_user.is_authenticated) %}
+                      Olá, {{ current_user.id }}!
+                      {% else %}
+                      Login
+                      {% endif %}</a></li>
                     </div>
                 </ul>
             </nav>
