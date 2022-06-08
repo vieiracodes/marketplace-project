@@ -54,7 +54,7 @@ Caso necessário, **coloque o icone " ⚠️ " na frente para definir prioridade
 
   `def pag_login()` {
 
-    Criar um sistema de validação do e-mail
+    Criar um sistema de validação do e-mail ✔️
     Criar um sistema para guardar o login do usuário ✔️
     Criar um sistema para verificar se um e-mail está disponível ou já está em uso ✔️
   }
@@ -77,6 +77,13 @@ Caso necessário, **coloque o icone " ⚠️ " na frente para definir prioridade
     Criar sistema para exibir status do post (aberto, fechado, redundante)
     Criar sistema para exibir usuários que publicaram as perguntas e respostas
     Sistema de permissões para publicar e responder posts
+
+  }
+
+  `def alert()` {
+
+    Criar pop-ups de status (erros, ação bem sucedida)
+    Criar uma página personalizada de erros ✔️
 
   }
 

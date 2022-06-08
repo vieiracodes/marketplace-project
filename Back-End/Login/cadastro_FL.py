@@ -12,6 +12,7 @@ from flask import jsonify
 import psycopg2
 from random import seed, randint
 import werkzeug.exceptions
+from flask import Response, make_response
 # import mysql.connector #comunicação com o banco de dados
 # from mysql.connector import errors
 
@@ -41,6 +42,15 @@ login_manager.__init__(app)
 # login_manager.login_message_category = "info"
 app.config.update(Config_email)
 mail = Mail(app)
+# def page_error(e):
+#     try:
+#         return render_template('landing_pages/html/page_error.html', status_code=e), 410
+#     except:
+#         return render_template('landing_pages/html/page_error.html', status_code='e')
+
+# app.register_error_handler(404, page_error)
+# app.register_error_handler(410, page_error)
+# app.register_error_handler(404, page_error)
 
 class User(UserMixin):
     pass
@@ -300,6 +310,38 @@ def error():
     return render_template('error.html', error=error)
 
 
+#-----------------------------------<Erros>------------------------------------#
+teste_code = 404
+def teste_alter_code(e):
+    global teste_code
+    teste_code = e.code
+    return page_error(e)
+
+@app.errorhandler(teste_code)
+def page_error(e):
+    try:
+        return render_template('landing_pages/html/page_error.html', status_code=e.code,
+        complete_status= f'{e.code} - {e.name}'),teste_code
+    except:
+        return render_template('landing_pages/html/page_error.html', status_code='???',
+        complete_status= f'??? - Erro não encontrado')
+
+app.register_error_handler(400, teste_alter_code)
+app.register_error_handler(401, teste_alter_code)
+app.register_error_handler(403, teste_alter_code)
+app.register_error_handler(404, teste_alter_code)
+app.register_error_handler(405, teste_alter_code)
+app.register_error_handler(410, teste_alter_code)
+
+app.register_error_handler(500, teste_alter_code)
+app.register_error_handler(501, teste_alter_code)
+app.register_error_handler(502, teste_alter_code)
+app.register_error_handler(503, teste_alter_code)
+app.register_error_handler(504, teste_alter_code)
+app.register_error_handler(505, teste_alter_code)
+
+
+
 #--------------------------------<Marketplace>---------------------------------#
 @app.route('/', methods = ['GET', 'POST'])
 def home():
@@ -351,7 +393,7 @@ def forum():
 @app.route('/delete', methods = ['POST'])
 def delete():
     lista_db = db.deletar_dados()
-    return lista_banco
+    return lista_db
 
 
 
@@ -360,10 +402,20 @@ def delete():
 @app.route('/teste', methods = ['POST', 'GET'])
 # @login_required
 def teste():
-    print(f'current_user: {current_user}')
-    print(f'current_user.id: {current_user.id}')
-    print(f'current_user.is_authenticated: {current_user.is_authenticated}')
-    return render_template('teste_login.html')
+    return render_template('landing_pages/html/page_error.html')
+    # msg = Message(
+    # subject= 'Verificação de email - Gamesplace (Teste)',
+    # recipients=["jherrerocavadas@gmail.com","emailverify.gamesplace@gmail.com"],
+    # html= render_template('landing_pages/html/corpo_email.html', verify_code='543216')
+    # )
+    # mail.send(msg)
+    #
+    # return render_template('landing_pages/html/corpo_email.html', verify_code= 'enviado!')
+
+    # print(f'current_user: {current_user}')
+    # print(f'current_user.id: {current_user.id}')
+    # print(f'current_user.is_authenticated: {current_user.is_authenticated}')
+    # return render_template('teste_login.html')
     # comms = conectar_banco()
     # cursor = comms.cursor()
     # # return f'User {User} e Senha {Senha}'
