@@ -395,22 +395,22 @@ def delete():
     lista_db = db.deletar_dados()
     return lista_db
 
-
+# C:/Users/Notebook/github/marketplace-project2/Back-End/Login/static/sources/images/global/g_place-logo.png
 
 #fins de teste
 #OBS:Ele passa os parâmetros pela Url
 @app.route('/teste', methods = ['POST', 'GET'])
 # @login_required
 def teste():
-    return render_template('landing_pages/html/page_error.html')
-    # msg = Message(
-    # subject= 'Verificação de email - Gamesplace (Teste)',
-    # recipients=["jherrerocavadas@gmail.com","emailverify.gamesplace@gmail.com"],
-    # html= render_template('landing_pages/html/corpo_email.html', verify_code='543216')
-    # )
-    # mail.send(msg)
-    #
-    # return render_template('landing_pages/html/corpo_email.html', verify_code= 'enviado!')
+    # return render_template('landing_pages/html/page_error.html')
+    msg = Message(
+    subject= 'Verificação de email - Gamesplace (Teste2)',
+    recipients=["jherrerocavadas@gmail.com","emailverify.gamesplace@gmail.com"],
+    html= render_template('landing_pages/html/corpo_email.html', verify_code='1111')
+    )
+    mail.send(msg)
+
+    return render_template('landing_pages/html/corpo_email.html', verify_code= '1234')
 
     # print(f'current_user: {current_user}')
     # print(f'current_user.id: {current_user.id}')
