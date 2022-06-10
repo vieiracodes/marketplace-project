@@ -1,56 +1,51 @@
-
-
 #-------------------------------<Configurações>--------------------------------#
-#O python atuará como um programa serverside
-from flask import Flask, request
-from flask import redirect, url_for, render_template, flash
-from flask_login import (LoginManager,UserMixin, login_user, logout_user,
- current_user, login_required)
+
+# Core do aplicativo
+from flask import Flask, request, redirect, url_for, render_template, flash
+
+#Sistema de login e autenticação - Expansão flask
+from flask_login import (LoginManager, UserMixin, login_user, logout_user,
+current_user, login_required)
+
+#Criptografia de senha
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_mail import Mail, Message
-from flask import jsonify
-import psycopg2
+
+#Geração de código para validação de email
 from random import seed, randint
+
+#Sistema de envio de emails - Expansão flask
+from flask_mail import Mail, Message
+
+#Comunicação com o banco de dados PostgreSQL
+import psycopg2
+
+#Comunicação com o banco de dados MySQL
+# import mysql.connector
+# from mysql.connector import errors #para tratamento de erros e exceções
+
+#arquivo de configuração de variáveis de ambiente e outros dados usados no programa
+from config import app_config, db_config, Config_email
+
+#Para tratamento de erros e exceções
 import werkzeug.exceptions
-from flask import Response, make_response
-# import mysql.connector #comunicação com o banco de dados
-# from mysql.connector import errors
+
 
 #Importação de variáveis de ambiente e outras configurações, caso necessário
 is_validation = None
 verify_code = ''
 User_data = None
-
-Config_email = {
-"MAIL_SERVER": 'smtp.gmail.com',
-"MAIL_PORT": 465,
-"MAIL_USE_TLS": False,
-"MAIL_USE_SSL": True,
-"MAIL_USERNAME": 'emailverify.gamesplace@gmail.com',
-"MAIL_PASSWORD": 'ocfqpzwspsaypngi',
-"MAIL_DEFAULT_SENDER": 'emailverify.gamesplace@gmail.com'
-}
-
+status_code = 404 #Código de teste padrão
 
 #Criação de uma instância do Flask
-app = Flask(__name__)
-app.secret_key = 'insert_secret_key'
+app = Flask(__name__,
+static_folder=app_config.static_folder,
+template_folder=app_config.template_folder)
+
+app.secret_key = app_config.secret_key
 login_manager = LoginManager()
 login_manager.__init__(app)
-# login_manager.login_view = 'login'
-# login_manager.login_message = 'Precisa logar, bro'
-# login_manager.login_message_category = "info"
 app.config.update(Config_email)
 mail = Mail(app)
-# def page_error(e):
-#     try:
-#         return render_template('landing_pages/html/page_error.html', status_code=e), 410
-#     except:
-#         return render_template('landing_pages/html/page_error.html', status_code='e')
-
-# app.register_error_handler(404, page_error)
-# app.register_error_handler(410, page_error)
-# app.register_error_handler(404, page_error)
 
 class User(UserMixin):
     pass
@@ -65,10 +60,10 @@ class Banco_de_dados():
         #Para PostgreSQL
         if(platform == 'PostgreSQL'):
             comms = psycopg2.connect(
-                host="ec2-52-3-2-245.compute-1.amazonaws.com",
-                user="ojkcyslsolzjxw",
-                password="de7fdc90c23fbfa7c949ff0b22cb8c55f8e7130c249da36863a9818fb07871f9",
-                database="de7bgah134l4lf"
+                host = db_config.host,
+                user = db_config.user,
+                password = db_config.password,
+                database = db_config.database,
             )
             return comms
 
@@ -87,10 +82,8 @@ class Banco_de_dados():
             print('levantou a exceção interna')
             return None
 
-
-
-
     def inserir_user(self, User_data):
+
         #melhorar essa atribuição depois
         #conexão do banco de dados
         self.comms = self.conectar_banco()
@@ -100,6 +93,19 @@ class Banco_de_dados():
         cursor.execute(add_User, User_data)
         self.comms.commit()
 
+    #Operação para verificar todos os logins
+    #NÂO UTILIZAR EM AMBIENTE DE PRODUÇÂO
+    def get_all_users(self):
+        email_list = []
+        senhas_list = []
+        lista_banco = {'Emails: ' : email_list, 'Senhas:' : senhas_list}
+        get_user = "SELECT Email, Senha, id FROM logins"
+        cursor.execute(get_user)
+        for(Email, Senha) in cursor:
+            email_list.append(Email)
+            senhas_list.append(Senha)
+        self.comms.commit()
+        return lista_banco
 
 
     #Operação para deletar todos os logins
@@ -121,19 +127,15 @@ class Banco_de_dados():
         self.comms.commit()
         return lista_banco
 
-
-
 db = Banco_de_dados()
 
 
 #decoradores de user_loader e request_loader, usados pelo flask_login
-
 @login_manager.user_loader
 def user_loader(email):
     if(db.Auth_tokens != None):
         if email not in db.Auth_tokens:
             return
-
     User_token = User()
     User_token.id = email
     return User_token
@@ -145,32 +147,23 @@ def request_loader(request):
     if(db.Auth_tokens != None):
         if email not in db.Auth_tokens:
             return
-
     User_token = User()
     User_token.id = email
     return User_token
-
-
 
 #--------------------------------<Autenticação>--------------------------------#
 
 #Função da página de cadastro
 @app.route('/cadastro', methods = ['GET','POST'])
 def cadastro():
-    # a função reseta sempre que a pagina recarrega.
     # ver um modo mais eficiente de persistir o status da página e o código da
     # validação para a próxima etapa
-    #print('is validation resetou')
     global is_validation
     global verify_code
     global User_data
-    #print(f'mas o valor de validation é: {is_validation}')
+
     #Recupera os dados do input html
     if(request.method == 'POST'):
-        # try:
-        #     is_validation = request.args['isvalidation']
-        # except:
-        #     is_validation = None
         if(is_validation == None):
 
             email = request.form['email']
@@ -191,7 +184,6 @@ def cadastro():
                 User_data = (email, Senha)
 
                 is_validation = 'email_verify'
-                #print(is_validation)
                 return render_template('landing_pages/html/email_verify.html')
             else:
                 return redirect(url_for('error', error='Usuário já existe! Tente outro email'))
@@ -202,12 +194,11 @@ def cadastro():
                 if(request.form['verify_code'] == 'verify_code'):
                     print(f'is_validation2: {is_validation}')
                     if(email_code == verify_code):
-                        # print(f'v_c(1): {verify_code[1]}')
                         try:
                             db.inserir_user(User_data)
 
                             #inserir o valor perfil no HTML (será mostrado o usuário no canto)
-                            flash('Cadastro concluído!')
+                            # flash('Cadastro concluído!')
                             return redirect(url_for('home'))
 
                         except psycopg2.errors.UniqueViolation:
@@ -223,13 +214,17 @@ def cadastro():
 
                     else:
                         print('Código inválido')
+                        #Substituir essa página por
                         return redirect(url_for('error', error='Código inválido!'))
+
+                        #popup flash nessa página
                         # return redirect(url_for('cadastro'))
             except werkzeug.exceptions.BadRequestKeyError:
                 return redirect(url_for('error', error='Página recarregada!'))
 
         else:
-            return '21'
+            return render_template('landing_pages/html/page_error.html', status_code='002',
+            complete_status= f'002 - Erro na etapa de cadastro')
     else:
         is_validation = None
         verify_code = ''
@@ -243,12 +238,10 @@ def cadastro():
 def login():
     lembra_user = False
     if(request.method == 'POST'):
-
         email = request.form['email']
         Senha = request.form['password']
-
         Auth_tokens = db.verificar_user(email)
-        #print(Auth_tokens)
+
         try:
             #se os valores existirem, são retornados
             if(Auth_tokens != None):
@@ -259,30 +252,30 @@ def login():
                     User_token.id = email
                     login_user(User_token, remember=lembra_user)
 
-                    flash('Login concluído!')
+                    # flash('Login concluído!')
+                    #popup flash nessa página
                     return redirect(url_for('home'))
 
                 else:
-                    flash('Senha incorreta!')
+                    # flash('Senha incorreta!')
+                    #popup flash nessa página
                     return redirect(url_for('login'))
 
             #se Auth_tokens == None
             else:
-                return redirect(url_for('error', error='Usuário não encontrado no banco!'))
-
+                #Substituir essa página por
+                return redirect(url_for('error', error='Usuário não encontrado no cadastro!'))
 
             #enviar um popup
                 # flash('Usuário não encontrado!')
+                #popup flash nessa página
                 # return redirect(url_for('login'))
-
-        #se não existirem (TypeError pois retorna um Nonetype)
         except TypeError:
-            #print('levantou a exceção externa')
             return redirect(url_for('error', error='Usuário não encontrado'))
                 #enviar um popup
                     # flash('Usuário não encontrado!')
+                    #popup flash nessa página
                     # return redirect(url_for('login'))
-
 
         #encerra a comunicação com o banco de dados independente do resultado
         finally:
@@ -295,11 +288,15 @@ def login():
 @app.route('/logout', methods = ['GET','POST'])
 def logout():
     logout_user()
-    flash('Conta desconectada com sucesso!')
+    #enviar um popup
+    # flash('Conta desconectada com sucesso!')
+    #popup flash nessa página
     return redirect(url_for('home'))
 
-#página de erro customizada no futuro (se der)
-@app.route('/error', methods = ['GET', 'POST'])
+#-----------------------------------<Erros>------------------------------------#
+
+#Página de erro - Trocar no futuro por popups flash
+@app.route('/error', methods = ['POST'])
 def error():
 
     try:
@@ -309,36 +306,36 @@ def error():
 
     return render_template('error.html', error=error)
 
-
-#-----------------------------------<Erros>------------------------------------#
-teste_code = 404
-def teste_alter_code(e):
-    global teste_code
-    teste_code = e.code
+def alter_code(e):
+    global status_code
+    status_code = e.code
     return page_error(e)
 
-@app.errorhandler(teste_code)
+@app.errorhandler(status_code)
 def page_error(e):
     try:
         return render_template('landing_pages/html/page_error.html', status_code=e.code,
-        complete_status= f'{e.code} - {e.name}'),teste_code
+        complete_status= f'{e.code} - {e.name}'),status_code
     except:
         return render_template('landing_pages/html/page_error.html', status_code='???',
         complete_status= f'??? - Erro não encontrado')
 
-app.register_error_handler(400, teste_alter_code)
-app.register_error_handler(401, teste_alter_code)
-app.register_error_handler(403, teste_alter_code)
-app.register_error_handler(404, teste_alter_code)
-app.register_error_handler(405, teste_alter_code)
-app.register_error_handler(410, teste_alter_code)
+#Alguns status de erro a serem exibidos na página de erro
+#Erros de cliente
+app.register_error_handler(400, alter_code)
+app.register_error_handler(401, alter_code)
+app.register_error_handler(403, alter_code)
+app.register_error_handler(404, alter_code)
+app.register_error_handler(405, alter_code)
+app.register_error_handler(410, alter_code)
 
-app.register_error_handler(500, teste_alter_code)
-app.register_error_handler(501, teste_alter_code)
-app.register_error_handler(502, teste_alter_code)
-app.register_error_handler(503, teste_alter_code)
-app.register_error_handler(504, teste_alter_code)
-app.register_error_handler(505, teste_alter_code)
+#Erros de servidor
+app.register_error_handler(500, alter_code)
+app.register_error_handler(501, alter_code)
+app.register_error_handler(502, alter_code)
+app.register_error_handler(503, alter_code)
+app.register_error_handler(504, alter_code)
+app.register_error_handler(505, alter_code)
 
 
 
@@ -352,18 +349,6 @@ def home():
             #Preço
             #Fotos (Caminho das imagens, talvez)
             #Estado do anúncio (aberto, encerrado)
-
-
-    if(request.method == 'POST'):
-        if(request.form['janela'] == 'Login'):
-            return redirect(url_for('login'))
-        elif(request.form['janela'] == 'Cadastro'):
-            return redirect(url_for('cadastro'))
-        elif(request.form['janela'] == 'Deletar'):
-            return redirect(url_for('delete'))
-        elif(request.form['janela'] == 'Forum'):
-            return redirect(url_for('forum'))
-
     return render_template('landing_pages/html/home.html')
     #return 'Página do Marketplace: Não implementada ainda'
 
@@ -384,31 +369,41 @@ def forum():
         #verificar autorização do usuário (se pode postar ou responder)
         #Usar o current_user.is_authenticated
 
-    return 'Página do Fórum: Não implementada ainda'
+    return render_template('landing_pages/html/page_error.html', status_code='???',
+    complete_status= 'Página do Fórum: Não implementada ainda')
+
 
 #------------------------------<Testes e devtools>-----------------------------#
 
 #Operação para deletar todos os logins
 #NÂO UTILIZAR EM AMBIENTE DE PRODUÇÂO
-@app.route('/delete', methods = ['POST'])
+#Descomentar a linha abaixo para habilitar a rota de delete(/delete)
+# @app.route('/delete', methods = ['POST', 'GET'])
 def delete():
     lista_db = db.deletar_dados()
-    return lista_db
+    return render_template('landing_pages/html/page_error.html', status_code='000',
+    complete_status= lista_db)
 
-# C:/Users/Notebook/github/marketplace-project2/Back-End/Login/static/sources/images/global/g_place-logo.png
+@app.route('/view_signatures', methods = ['POST', 'GET'])
+def delete():
+    lista_db = db.deletar_dados()
+    return render_template('landing_pages/html/page_error.html', status_code='001',
+    complete_status= lista_db)
+
 
 #fins de teste
-#OBS:Ele passa os parâmetros pela Url
-@app.route('/teste', methods = ['POST', 'GET'])
-# @login_required
+
+#Descomentar a linha abaixo para habilitar a rota de testes(/teste)
+# @app.route('/teste', methods = ['POST', 'GET'])
+# @login_required #Para fazer teste com página protegida, descomente essa também
 def teste():
-    # return render_template('landing_pages/html/page_error.html')
-    msg = Message(
-    subject= 'Verificação de email - Gamesplace (Teste2)',
-    recipients=["jherrerocavadas@gmail.com","emailverify.gamesplace@gmail.com"],
-    html= render_template('landing_pages/html/corpo_email.html', verify_code='1111')
-    )
-    mail.send(msg)
+
+    # msg = Message(
+    # subject= 'Verificação de email - Gamesplace (Teste2)',
+    # recipients=[],
+    # html= render_template('landing_pages/html/corpo_email.html', verify_code='1111')
+    # )
+    # mail.send(msg)
 
     return render_template('landing_pages/html/corpo_email.html', verify_code= '1234')
 
@@ -430,12 +425,8 @@ def teste():
 
 
 
-
-
-
-
-
-#Processo para que o aplicativo seja executado como um site
+#Processo para que todo o backend e estrutura do site sejam executados ao
+#rodar esse arquivo python
 
 if (__name__ == '__main__'):
     app.run(debug= True)
