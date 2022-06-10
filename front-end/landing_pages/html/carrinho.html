@@ -13,34 +13,37 @@
     <header>
         <nav id="menu_g-place">
             <ul>
-                <li><a href="home.html"><img src="../../sources/images/global/g_place-logo.png" alt="Gamers_Place-logo" draggable="false" id="logo"></a></li>
-                <li><input type="text" id="barra_pesquisa"><button id="barra_pesquisa_confirm">P</button></li>
-                <div class="btns">
-                    <li><a href="" id="car-btn">Carrinho</a></li>
-                    <li><a href="login.html" id="login-btn" target="_blank">Login</a></li>
+                <li><a href="../home.html"><img src="../../sources/images/global/g_place-logo.png" alt="Gamers_Place-logo" draggable="false" id="logo"></a></li>
+                <li class="container-input"><input type="text" id="barra_pesquisa"><button id="barra_pesquisa_confirm"><img src="../../sources/images/global/searchmagnifierinterfacesymbol1_79893.svg" alt=""></button></li>
+
+                <div class="search-login-cart">
+                    <div class="menu-icon">
+                        <img src="../../sources/images/global/menu-icon.svg" alt="icon-menu" id="menu-icon-svg">
+                    </div>
+                    <div class="btns">
+                        <div class="container-icon-barra-pesquisa">
+                            <a href="../carrinho.html"><img src="../../sources/images/global/searchmagnifierinterfacesymbol1_79893.svg" alt="" width="25px" id="btn-barra-pesquisa"></a>
+                        </div>
+                        <li>
+                            <a href="../carrinho.html" id="car-btn">
+                                 <img src="../../sources/images/global/cart-icon.svg" alt="" id="cart-icon">
+                                <p>Carrinho</p>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="../login.html" id="login-btn" target="_blank">
+                                <p>Login</p>
+                            </a>
+                        </li>
+                    </div>
                 </div>
             </ul>
         </nav>
     </header>
     <main>
-        <section id="lista_car">
-            <section id="produtos">
-                <article class="produto">
-                    <div class="container_info">
-                        <img src="../../sources/images/home/con001.png" alt="foto1" class="foto_produto">
-                        <p class="nome_produto">PlayStation 5 - Standard Version</p>
-                    </div>
-                    <button>-</button>
-                    <p class="quantidade_produto">Qtd. 1</p>
-                    <button>+</button>
-                    <p class="valor_produto">R$ 0000,00</p>
-                    <p class="close">x</p>
-                </article>
-            </section>
-            <section id="total_preco">
-
-            </section>
-        </section>
+        <p class="error">Ops, ainda não há nenhum produto aqui :)
+        </p>
     </main>
     <footer>
         <p>Site criado por : 
@@ -52,6 +55,7 @@
         <p>
             <br> Site criado para fins academicos. Toda e qualquer oferta disponivel aqui não passa de uma propaganda ficticia.</p>
     </footer>
+    <script src="../scripts/global.js"></script>
     <script src="../scripts/produtos.js"></script>
     <script src="../scripts/carrinho.js"></script>
 </body>
