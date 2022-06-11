@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho</title>
+    <link rel="shortcut icon" href="static/sources/images/global/g-place.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/carrinho.css">
+</head>
+<body>
+    <header>
+        <nav id="menu_g-place">
+            <ul>
+                <li><a href="/"><img src="static/sources/images/global/g_place-logo.png" alt="Gamers_Place-logo" draggable="false" id="logo"></a></li>
+                <li><input type="text" id="barra_pesquisa"><button id="barra_pesquisa_confirm">P</button></li>
+                <div class="btns">
+                    <li><a href="" id="car-btn">Carrinho</a></li>
+                    <li><a href="/login" id="login-btn" target="_blank">Login</a></li>
+                </div>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="lista_car">
+            <section id="produtos">
+                <article class="produto">
+                    <div class="container_info">
+                        <img src="static/sources/images/home/con001.png" alt="foto1" class="foto_produto">
+                        <p class="nome_produto">PlayStation 5 - Standard Version</p>
+                    </div>
+                    <button>-</button>
+                    <p class="quantidade_produto">Qtd. 1</p>
+                    <button>+</button>
+                    <p class="valor_produto">R$ 0000,00</p>
+                    <p class="close">x</p>
+                </article>
+            </section>
+            <section id="total_preco">
+
+            </section>
+        </section>
+    </main>
+    <footer>
+        <p>Site criado por :
+            <br>
+            Gabriel Vieira (Front-End)
+            <br>
+            Johann Herrero (Back-End)
+        </p>
+        <p>
+            <br> Site criado para fins academicos. Toda e qualquer oferta disponivel aqui não passa de uma propaganda ficticia.</p>
+    </footer>
+    <script src="../scripts/produtos.js"></script>
+    <script src="../scripts/carrinho.js"></script>
+</body>
+</html>

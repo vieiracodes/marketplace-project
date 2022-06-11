@@ -352,6 +352,10 @@ def home():
     return render_template('landing_pages/html/home.html')
     #return 'Página do Marketplace: Não implementada ainda'
 
+#página de produtos
+@app.route('/pag_produtos/<path:path>', methods = ['GET', 'POST'])
+def pag_produtos(path):
+    return render_template(f'landing_pages/html/pag_produtos/{path}')
 
 
 #-----------------------------------<Fórum>------------------------------------#
