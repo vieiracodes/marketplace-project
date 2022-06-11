@@ -1,0 +1,269 @@
+main{
+    background-color: rgba(0, 0, 0, 0.575);
+    margin: 20px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.315);
+}
+
+.container-info{
+    padding: 30px 2%;
+    display: flex;
+    flex-direction: column;
+    width: 90vw;
+    text-align: center;
+    margin: 100px auto;
+
+}
+
+.titulo{
+    font-size: 3vw;
+    margin-bottom: 0px;
+    
+}
+
+.titulo::after{
+    content: '';
+    display: block;
+    height: 1px;
+    width: 40vw;
+    margin: 5px auto;
+    background-color: rgb(214, 214, 214);
+}
+
+.preco-img{
+    display: flex;
+    margin-top: 30px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.preco-img .titulo{
+    font-size: 28px;
+}
+
+.descricao{
+    max-height: 275px;
+    width: 60vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    line-height: 25px;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.preco-img .titulo::after{
+    content: none;
+}
+
+.img-container{
+    display: flex;
+    overflow: hidden;
+    border-radius: 10px;
+    width: 55vw;
+    height: 31vw;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+
+}
+
+.pagamento .img-container{
+    background-color: transparent !important;
+    width: 18vw;
+    height: 10vw;
+}
+
+.img--container--pag{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.img-container #img_produto{
+    width: 100%;
+    height: 100% !important;
+}
+
+
+.pagamento{
+    display: flex;
+    position: relative;
+    /*right: 7vw;*/
+    flex-direction: column;
+    width: 25vw;
+    min-width: 200px;
+    height: 31vw;
+    border-radius: 10px;
+    padding: 1.5vw 10px;
+    background-color: rgb(41, 41, 41);
+    align-items: center;
+    justify-content: space-between;
+}
+
+.container-price-btns{
+    height: 60%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.pagamento button{
+    width: 95%;
+    height: 20vw;
+    font-size: 1.5vw;
+    font-weight: 600;
+    margin: 3px auto;
+    border-radius: 12px;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.295);
+    padding: 1px;
+    border: 2px solid white;
+}
+
+
+#btn-carrinho-redirect{
+    color: white;
+    background-color: transparent;
+
+}
+
+.container-price-btns .titulo{
+    font-size: 2.3vw;
+    margin-top: 1.2vw;
+}
+
+.btn-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    height: 70%;
+}
+
+#btn-lista-desejos{
+    border: none;
+    box-shadow: none;
+    font-weight: 400;
+    font-size: 1.4vw;
+}
+
+.desc-product{
+    width: 55vw;
+}
+
+.desc-product .titulo{
+    margin: 20px auto;
+    width: auto;
+}
+
+.desc-product .titulo::after{
+    content: none;
+}
+
+.text-desc, .text-desc > p{
+    text-align: left;
+    font-size: 1.8vw;
+    line-height: 2.2vw;
+    color: rgb(189, 189, 189);
+}
+
+@media (max-width: 768px) {
+
+    main{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .preco-img{
+        flex-direction: column;
+    }
+
+    .img-container{
+        width: 90vw;
+        height: 45vw;
+        border-radius: 10px 10px 0px 0px;
+    }
+
+    .pagamento .titulo{
+        margin-left: 10px;
+    }
+
+    .pagamento{
+        border-radius: 0px 0px 10px 10px;
+        width: 90vw;
+        height: 15vw;
+        padding: 2vw;
+    }
+
+    .pagamento button{
+        width: 23vw;
+        height: 11vw;
+        font-size: 3vw;
+        padding: 3px;
+    }
+
+    .container-price-btns{
+        flex-direction: row;
+        width: 100%;
+        height: 200px;
+        align-items: center;
+    }
+
+    .btn-container{
+        display: flex;
+        flex-direction: row-reverse;
+        width: 100%;
+        height: auto;
+    }
+
+    .container-price-btns button{
+        margin: 0px 10px;
+    }
+
+    .text-desc > p{
+        
+        font-size: 16px;
+        line-height: 27px;
+
+    }
+
+    .btns-colored{
+        display: flex;
+        flex-direction: row-reverse;
+    }
+
+    .pagamento .img-container{
+        display: none;
+    }
+
+    #preco_produto{
+        font-size: 5vw;
+        height: 5vw;
+        margin-top: 0;
+    }
+
+    .container-info{
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .container-info .titulo{
+        font-size: 5vw;
+    }
+    .container-info .titulo::after{
+        width: 60vw;
+    }
+
+    .container-price-btns .titulo{
+        margin-top: 0;
+    }
+
+    .desc-product{
+        width: 90vw;
+    }
+}
+
+@media (max-width: 425px) {
+
+    
+}

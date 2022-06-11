@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        fill-rule: evenodd;
+      }
+
+      .cls-2 {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: square;
+        stroke-width: 63px;
+      }
+    </style>
+  </defs>
+  <path id="Retângulo_1" data-name="Retângulo 1" class="cls-1" d="M702.444,668.369S967.381,930.77,972.121,937.2c26.411,30.812-20.18,61.567-40.686,41.312-9.481-9.82-269.73-268.583-269.73-268.583Z"/>
+  <circle id="Elipse_1" data-name="Elipse 1" class="cls-2" cx="425.813" cy="418.813" r="387.813"/>
+</svg>

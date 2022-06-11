@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="shortcut icon" href="static/sources/images/global/g-place.ico" type="image/x-icon">
+    <link rel="stylesheet" href="static/styles/login.css">
+    <link rel="stylesheet" href="static/styles/global.css">
+</head>
+<body>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class=flashes>
+        {% for message in messages %}
+        <div colour="green" role="alert">
+          {{ message }}
+        </div>
+        {% endfor %}
+        </ul>
+    {% endif %}
+  {% endwith %}
+  <form action="/login" method="post">
+    <div class="caixa_login">
+        <h1 class="sub-titulo">Login</h1>
+        <input type="text" name="email" id="email" placeholder="Digite seu E-mail">
+        <input type="password" name="password" id="password" placeholder="Insira a Senha">
+        <button type="submit" id="prosseguir" name="prosseguir">Prosseguir</button>
+        <h5>Não possui um cadastro ainda? <a href="/cadastro" >Clique aqui</a></h5>
+
+    </div>
+    </form>
+    <!-- <script src="../scripts/login.js"></script> -->
+</body>
+</html>

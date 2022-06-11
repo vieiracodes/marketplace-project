@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>protected</title>
+     <link rel="stylesheet" href="static/styles/login.css" />
+
+    </head>
+    <body>
+
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul class=flashes>
+            {% for message in messages %}
+            <div colour="green" role="alert">
+              {{ message }}
+            </div>
+            {% endfor %}
+            </ul>
+        {% endif %}
+      {% endwith %}
+        <form action="/" method="post">
+          <div class="caixa_login">
+
+            <h1 class="sub-titulo">Autenticação - Teste</h1>
+            <h2 class="sub-titulo">
+
+              <!-- {% if current_user.id != None %}
+              Olá, {{ current_user.id }}!
+               {% elif Auth_tokens == None %}
+              Login
+              {% else %}
+              Login
+              {% endif %} -->
+              {% if current_user.is_authenticated %}
+                  Olá {{ current_user.id }}!
+              {% else %}
+                  Olá Visitante!
+              {% endif %}
+            </h2>
+
+          </div>
+        </form>
+    </body>
+    </html>
