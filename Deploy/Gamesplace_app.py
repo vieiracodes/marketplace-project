@@ -96,16 +96,16 @@ class Banco_de_dados():
     #Operação para verificar todos os logins
     #NÂO UTILIZAR EM AMBIENTE DE PRODUÇÂO
     def get_all_users(self):
+        self.comms = self.conectar_banco()
+        cursor = self.comms.cursor()
         email_list = []
         senhas_list = []
-        lista_banco = {'Emails: ' : email_list, 'Senhas:' : senhas_list}
-        get_user = "SELECT Email, Senha, id FROM logins"
-        cursor.execute(get_user)
-        for(Email, Senha) in cursor:
+        get_all_user = "SELECT Email FROM logins"
+        cursor.execute(get_all_user)
+        for(Email) in cursor:
             email_list.append(Email)
-            senhas_list.append(Senha)
         self.comms.commit()
-        return lista_banco
+        return email_list
 
 
     #Operação para deletar todos os logins
@@ -196,7 +196,7 @@ def cadastro():
                     if(email_code == verify_code):
                         try:
                             db.inserir_user(User_data)
-
+                            print('inserido!')
                             #inserir o valor perfil no HTML (será mostrado o usuário no canto)
                             # flash('Cadastro concluído!')
                             return redirect(url_for('home'))
@@ -206,7 +206,7 @@ def cadastro():
 
                         finally:
                             #encerra a comunicação com o banco de dados independente do resultado
-                            print('aqui deu finally')
+
                             print(f'is_validation3: {is_validation}')
                             db.comms.close()
                             verify_code = ''
@@ -296,7 +296,7 @@ def logout():
 #-----------------------------------<Erros>------------------------------------#
 
 #Página de erro - Trocar no futuro por popups flash
-@app.route('/error', methods = ['POST'])
+@app.route('/error', methods = ['GET', 'POST'])
 def error():
 
     try:
@@ -318,7 +318,7 @@ def page_error(e):
         complete_status= f'{e.code} - {e.name}'),status_code
     except:
         return render_template('landing_pages/html/page_error.html', status_code='???',
-        complete_status= f'??? - Erro não encontrado')
+        complete_status= f'??? - Erro desconhecido')
 
 #Alguns status de erro a serem exibidos na página de erro
 #Erros de cliente
@@ -388,9 +388,9 @@ def delete():
     return render_template('landing_pages/html/page_error.html', status_code='000',
     complete_status= lista_db)
 
-@app.route('/view_signatures', methods = ['POST', 'GET'])
-def delete():
-    lista_db = db.deletar_dados()
+# @app.route('/view_signatures', methods = ['POST', 'GET'])
+def view_signatures():
+    lista_db = db.get_all_users()
     return render_template('landing_pages/html/page_error.html', status_code='001',
     complete_status= lista_db)
 

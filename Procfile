@@ -1,1 +1,1 @@
-web: gunicorn ./Back-end/Login/cadastro_FL:app
+web: gunicorn Gamesplace_app:app
