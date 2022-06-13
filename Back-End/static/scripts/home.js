@@ -22,9 +22,7 @@ var btn_back_slide = document.getElementById('slideLeft');
 
 //Chamar funções do botão
 btn_back_slide.addEventListener('click', passaEsquerda);
-btn_back_slide.addEventListener('touchstart', passaEsquerda)
 btn_go_slide.addEventListener('click', passaDireita);
-btn_go_slide.addEventListener('touchstart', passaDireita);
 
 //Variaveis para o slider funcionar
 var slide1 = document.getElementsByClassName('passaSlide')[0]
@@ -32,7 +30,6 @@ var passaSlide = 0
 var count = 1;
 var margin = document.getElementsByClassName('destaques')[0]
 
-console.log(margin.offsetLeft)
 
 //Mapear Radio Inputs
 var image1 = document.getElementById('radio1')
@@ -42,16 +39,12 @@ var image4 = document.getElementById('radio4')
 
 //pular para X slide
 image1.addEventListener('click', slide01)
-image1.addEventListener('touchstart', slide01)
 
 image2.addEventListener('click', slide02)
-image2.addEventListener('touchstart', slide02)
 
 image3.addEventListener('click', slide03)
-image3.addEventListener('touchstart', slide03)
 
 image4.addEventListener('click', slide04)
-image4.addEventListener('touchstart', slide04)
 
 //Funcionamento do slider
 function passaDireita(){
