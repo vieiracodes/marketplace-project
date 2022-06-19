@@ -357,6 +357,10 @@ def home():
 def pag_produtos(path):
     return render_template(f'landing_pages/html/pag_produtos/{path}')
 
+#Carrinho
+@app.route('/carrinho.html', methods = ['GET', 'POST'])
+def carrinho():
+    return render_template('landing_pages/html/carrinho.html')
 
 #-----------------------------------<Fórum>------------------------------------#
 @app.route('/forum', methods = ['GET', 'POST'])
@@ -373,8 +377,7 @@ def forum():
         #verificar autorização do usuário (se pode postar ou responder)
         #Usar o current_user.is_authenticated
 
-    return render_template('landing_pages/html/page_error.html', status_code='???',
-    complete_status= 'Página do Fórum: Não implementada ainda')
+    return render_template('landing_pages/html/forum.html')
 
 
 #------------------------------<Testes e devtools>-----------------------------#
