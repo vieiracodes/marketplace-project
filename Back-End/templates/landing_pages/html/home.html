@@ -50,7 +50,11 @@
                             logout
                             {% else %}
                             login
-                            {% endif %}" id="login-btn" target="_blank">
+                            {% endif %}" id="login-btn" target="
+                            {% if not (current_user.id != None and current_user.is_authenticated) %}
+                            _blank
+                            {% endif %}">
+                            
                               <p>{% if (current_user.id != None and current_user.is_authenticated) %}
                               Olá, {{ current_user.id }}!
                               {% else %}

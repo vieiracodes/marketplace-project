@@ -1,0 +1,137 @@
+{% extends "navbar.html" %}
+
+    {% block head %}
+    {{ super() }}
+    <title>Home</title>
+    <link rel="stylesheet" href="static/styles/home.css">
+    <!-- <link rel="stylesheet" href="static/styles/global.css"> -->
+    {% endblock %}
+
+<body>
+    {% block header %}
+    {{ super() }}
+    {% endblock %}
+
+  {% block main %}
+  {{ super() }}
+      <section class="container_destaques">
+          <p class="titulo">Destaques</p>
+          <div>
+              <div class="destaques">
+                  <a href="pag_produtos/final-fantasy-7-remake.html">
+                      <img src="static/sources/images/products/final-fantasy-vii-remake.jpg" alt="01" name="img01" draggable="false" class="slides" id="passaSlide">
+                  </a>
+
+                  <a href="pag_produtos/forza-horizon-4.html">
+                      <img src="static/sources/images/products/forza-horizon-4.jpg" alt="02" name="img02" draggable="false" class="slides">
+                  </a>
+
+                  <a href="pag_produtos/ghost-of-tsushima.html">
+                      <img src="static/sources/images/products/ghost-of-tsushima.jpeg" alt="03" name="img03" draggable="false" class="slides">
+                  </a>
+
+                  <a href="pag_produtos/naruto_ultimate_ninja_storm_4.html">
+                      <img src="static/sources/images/home/des004.jpg" alt="04" name="img04" draggable="false" class="slides">
+                  </a>
+
+
+                  <div id="slider_input">
+                      <span class="slide_selector_checked" id="radio1"></span>
+                      <span class="slide_selector" id="radio2"></span>
+                      <span class="slide_selector" id="radio3"></span>
+                      <span class="slide_selector" id="radio4"></span>
+                  </div>
+
+                  <button id="slideLeft"> L </button>
+                  <button id="slideRight"> R </button>
+
+              </div>
+      </section>
+      <section id="console">
+
+          <p class="titulo">Consoles</p>
+
+          <div class="container_produtos">
+          </div>
+
+      </section>
+
+      <section id="exclusivos_Ps">
+
+          <p class="titulo">Exclusivos PlayStation</p>
+
+          <div class="container_produtos">
+          </div>
+
+      </section>
+
+
+      <section id="exclusivos_Xbox">
+
+          <p class="titulo">Exclusivos Xbox</p>
+
+          <div class="container_produtos">
+              <div class="passaProduto"></div>
+          </div>
+
+      </section>
+
+
+      <section id="exclusivos_Nin">
+
+          <p class="titulo">Exclusivos Nintendo Switch</p>
+
+          <div class="container_produtos">
+              <p class="error">Ops, ainda não há nenhum produto aqui :)</p>
+          </div>
+
+      </section>
+
+
+      <section id="outros">
+
+          <p class="titulo">Outros Jogos</p>
+
+          <div class="container_produtos">
+          </div>
+
+      </section>
+      <aside></aside>
+
+      <!-- ver de colocar a section_estranha aqui -->
+
+  {% endblock %}
+
+  {% block footer %}
+  {{ super() }}
+  {% endblock %}
+
+  {% block section_estranha %}
+  <section id="exclusivosVoid">
+      <div class="container_produtos">
+
+          <div class="produto">
+
+              <a class="link" href="">
+                  <img src="" alt="" class="img_produto">
+                  <p class="nome-produto"></p>
+              </a>
+
+              <p class="resumo"></p>
+              <p class="preco"></p>
+
+              </div>
+
+          </div>
+  </section>
+  {% endblock %}
+
+  {% block scripts %}
+  {{ super() }}
+  <!-- <script src="static/scripts/global.js"></script> -->
+  <script src="static/scripts/produtos.js"></script>
+  <script src="static/scripts/home.js"></script>
+  <!-- <script src="static/scripts/pesquisar.js"></script> -->
+  {% endblock %}
+</body>
+</html>
