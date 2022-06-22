@@ -1,8 +1,7 @@
 /*-------------------------------<AutoComplete>-------------------------------*/
 
 // Autocomplete da barra de pesquisa
-function autoComplete() {
-
+function autoComplete(sugestions) {
 // Importação de "bibliotecas para funcionamento do autoComplete"
   const head = document.head || document.getElementsByTagName('head')[0]
   const styles = ["http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"];
@@ -28,12 +27,18 @@ function autoComplete() {
     }
 
 //Execução da função de autoComplete
-$( function() {
-  //sugests será o que aparecerá como recomendação de autocomplete
-  var sugests = ['PS4', 'PS3', 'PlayStation4', 'PlayStation3', 'PlayStation',
-  'Xbox One', 'Xbox360', 'Xbox', 'Switch', 'Nintendo Switch', 'Nintendo', '3DS',
-  'Nintendo 3DS'];
-  $( "#barra_pesquisa" ).autocomplete({
-    source: sugests });
-  });
+$(function(){
+    var sugests = sugestions
+    $("#barra_pesquisa").autocomplete({source: sugests});
+  
+});
+//
+// $( function(sugestions) {
+//   //sugests será o que aparecerá como recomendação de autocomplete
+//   var sugests = ['PS4', 'PS3', 'PlayStation4', 'PlayStation3', 'PlayStation',
+//   'Xbox One', 'Xbox360', 'Xbox', 'Switch', 'Nintendo Switch', 'Nintendo', '3DS',
+//   'Nintendo 3DS'];
+//   $( "#barra_pesquisa" ).autocomplete({
+//     source: sugestions });
+//   });
 }
