@@ -5,8 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Erro! - {{status_code}}</title>
-     <link rel="stylesheet" href="static/styles/global.css" />
-     <link rel="stylesheet" href="static/styles/error.css" />
+    <!-- Usar o url_for() resolve o problema do css da página de erro não
+         carregar quando a url acessada "herdava"  de algo além da página
+         principal. exemplo: -->
+    <!-- localhost/loguin -> página de erro carregava com o css -->
+    <!-- localhost/loguin/ -> página de erro carregava só com o html básico -->
+    <!-- localhost/login/123 -> página de erro carregava só com o html básico -->
+    <!-- para testar o efeito acima, substituir as linhas de stylesheet abaixo: -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/error.css') }}">
+    <!-- pelas linhas de stylesheet abaixo: -->
+     <!-- <link rel="stylesheet" href="static/styles/global.css"> -->
+     <!-- <link rel="stylesheet" href="static/styles/error.css"> -->
 
 </head>
 
