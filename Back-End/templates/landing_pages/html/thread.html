@@ -3,7 +3,7 @@
     <!-- Herança da tag head - Incluso css global e imagem da logo  -->
     {% block head %}
     {{ super() }}
-    <title>Fórum</title>
+    <title>{{thread}}</title>
     {% endblock %}
 
 <body>
@@ -21,7 +21,7 @@
     {% endblock %}
 
   {% block main %}
-   <h1> Página inicial do fórum - em construção</h1>
+   <h1>thread - {{thread}}</h1>
 
   {% endblock %}
 

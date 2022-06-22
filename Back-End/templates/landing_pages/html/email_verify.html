@@ -10,21 +10,33 @@
     <link rel="stylesheet" href="static/styles/global.css">
 </head>
 <body>
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <ul class=flashes>
-        {% for message in messages %}
-        <div colour="green" role="alert">
-          {{ message }}
-        </div>
-        {% endfor %}
-        </ul>
-    {% endif %}
-  {% endwith %}
+
   <form action="/cadastro" method="post">
     <div class="caixa_login">
+      <!-- popup de status -->
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul>
+            {% for message in messages %}
+            <div style="
+            /* estilo de teste */
+            /* ver de inserir no global.css */
+            color: white;
+            padding: 5px 7px 5px 7px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            background-color: #2196ff;
+            border-radius: 5px;
+            box-shadow: 3px 4px 7px rgba(0, 0, 0, 0.356);">
+              {{ message }}
+            </div>
+            {% endfor %}
+            </ul>
+        {% endif %}
+      {% endwith %}
         <h1 class="sub-titulo">Verificar Email</h1>
-        <input type="text" name="email_code" id="email_code" maxlength="4" 
+        <input type="text" name="email_code" id="email_code" maxlength="4"
         size="4" placeholder="Digite o código enviado ao seu E-mail">
         <!-- <input type="number" name="email_code1" maxlength="1" size="1" id="email_code1">
         <input type="number" name="email_code2" maxlength="1" size="1" id="email_code2">

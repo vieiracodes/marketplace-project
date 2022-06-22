@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{thread}}</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/global.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static',filename='sources/images/global/g-place.ico') }}" type="image/x-icon">
+</head>
+<body>
+  <!-- Teste - Código Jinja para exibição de status do login -->
+  <!-- popup de status -->
+  <div style="
+  /* estilo de teste */
+  /* ver de inserir no global.css */
+  position: relative;
+  bottom: 15px;
+  right: 10px;
+  padding: 10px 21px 10px 14px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  background-color: #2196ff;
+  border-radius: 5px;
+  box-shadow: 3px 4px 7px rgba(0, 0, 0, 0.356);">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <span style="color: white;">{{ message }}</span>
+
+        <span style="
+          position: absolute;
+          padding-left: 7px;
+          top: 3px;
+          right: 5px;
+          color: white;
+          font-size: 17px;
+          cursor: pointer;"
+          onclick="this.parentElement.style.display='none';">x</span>
+        {% endfor %}
+    {% endif %}
+  {% endwith %}
+  </div>
+
+  <header>
+      <nav id="menu_g-place">
+          <ul>
+              <li><a href="/"><img src="{{ url_for('static',filename='sources/images/global/g_place-logo.png') }}" alt="Gamers_Place-logo" draggable="false" id="logo"></a></li>
+              <li class="container-input"><input type="text" id="barra_pesquisa" oninput="autoComplete({{sugestions}})"><button id="barra_pesquisa_confirm"><img src="{{ url_for('static',filename='sources/images/global/searchmagnifierinterfacesymbol1_79893.svg') }}" alt=""></button></li>
+
+              <div class="search-login-cart">
+                  <div class="menu-icon">
+                      <img src="{{ url_for('static',filename='sources/images/global/menu-icon.svg') }}" alt="icon-menu" id="menu-icon-svg">
+                  </div>
+                  <div class="btns">
+                      <div class="container-icon-barra-pesquisa">
+                          <img src="{{ url_for('static',filename='sources/images/global/searchmagnifierinterfacesymbol1_79893.svg') }}" alt="" width="25px" id="btn-barra-pesquisa">
+                      </div>
+
+                      <li>
+                          <a href="
+                            {% if (current_user.id != None and current_user.is_authenticated) %}
+                            logout
+                            {% else %}
+                            login
+                            {% endif %}" id="login-btn" target="_blank">
+                              <p>{% if (current_user.id != None and current_user.is_authenticated) %}
+                              Olá, {{ current_user.id }}!
+                              {% else %}
+                              Login
+                              {% endif %}</p>
+                          </a>
+                      </li>
+                  </div>
+              </div>
+          </ul>
+      </nav>
+  </header>
+
+  <main>
+    <h2>{{thread}}</h2>
+      <aside></aside>
+  </main>
+
+  <footer>
+      <p>Site criado por :
+          <br>
+          Gabriel Vieira (Front-End)
+          <br>
+          Johann Herrero (Back-End)
+      </p>
+      <p>
+          <br> Site criado para fins academicos. Toda e qualquer oferta disponivel aqui não passa de uma propaganda ficticia.</p>
+  </footer>
+  <script src="{{ url_for('static',filename='scripts/global.js') }}"></script>
+  <script src="{{ url_for('static',filename='scripts/pesquisar.js') }}"></script>
+</body>
+</html>
