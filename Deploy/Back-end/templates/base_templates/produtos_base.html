@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    {% block head %}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlayStation 4</title>
+    <!-- <title>decidir no amigão filho</title> -->
     <link rel="shortcut icon" href="../../../static/sources/images/global/g-place.ico" type="image/x-icon">
     <link rel="stylesheet" href="../../../static/styles/global.css">
     <link rel="stylesheet" href="../../../static/styles/produtos.css">
+    {% endblock %}
 </head>
 <body>
+  <!-- ver de herdar do navbar -->
+  {% block header %}
     <header>
         <nav id="menu_g-place">
             <ul>
@@ -50,21 +54,24 @@
             </ul>
         </nav>
     </header>
+    {% endblock %}
+
+    {% block main %}
     <main>
         <section id="produto-info">
             <div class="container-info">
-                <p id="nome_produto" class="titulo">PlayStation 4</p>
+                <p id="nome_produto" class="titulo">Final Fantasy 7 Remake</p>
                 <div class="preco-img">
-                    <div class="img-container"><img src="../../../static/sources/images/products/playstation-4.webp" alt="" id="img_produto"></div>
+                    <div class="img-container"><img src="../../../static/sources/images/products/final-fantasy-vii-remake.jpg" alt="" id="img_produto"></div>
                     <div class="pagamento">
-                        <div class="img-container"><img src="../../../static/sources/images/products/playstation-logo.png" class="img--container--pag" alt="">
+                        <div class="img-container"><img src="../../../static/sources/images/products/final-fantasy-vii-logo.png" class="img--container--pag" alt="">
                         </div>
 
                         <div class="container-price-btns">
-                            <p class="titulo">R$2290,00</p>
+                            <p class="titulo">R$299,90</p>
                             <div class="btn-container">
-                              <button id="btn-compra-confirm" style="background-color: rgb(0, 110, 255); color: rgb(255, 255, 255)"><a href="/carrinho.html" style="color:rgb(255, 255, 255);">Comprar Agora</a></button>
-                              <button id="btn-carrinho-redirect"><a href="/carrinho.html" style="color:rgb(255, 255, 255);">Adicionar ao Carrinho</a></button>
+                              <button id="btn-compra-confirm" style="background-color: rgb(13, 156, 137)"><a href="/carrinho.html" style="color:white;">Comprar Agora</a></button>
+                              <button id="btn-carrinho-redirect"><a href="/carrinho.html" style="color:white;">Adicionar ao Carrinho</a></button>
                             </div>
                         </div>
                     </div>
@@ -97,6 +104,9 @@
 
         </section>
     </main>
+    {% endblock %}
+
+    {% block footer %}
     <footer>
         <p>Site criado por :
             <br>
@@ -107,7 +117,11 @@
         <p>
             <br> Site criado para fins academicos. Toda e qualquer oferta disponivel aqui não passa de uma propaganda ficticia.</p>
     </footer>
+    {% endblock %}
+
+    { % block scripts % }
     <script src="{{ url_for('static',filename='scripts/global.js') }}"></script>
     <script src="{{ url_for('static',filename='scripts/produtos.js') }}"></script>
+    {% endblock %}
 </body>
 </html>

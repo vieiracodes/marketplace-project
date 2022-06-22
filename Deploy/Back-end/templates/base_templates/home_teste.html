@@ -110,7 +110,6 @@
 
   {% endblock %}
 
-  <!-- Herança de informações de rodapé -->
   {% block footer %}
   {{ super() }}
   {% endblock %}
@@ -135,12 +134,12 @@
   </section>
   {% endblock %}
 
-  <!-- Herança de scripts - global e pesquisar  -->
   {% block scripts %}
   {{ super() }}
-  <script src="{{ url_for('static',filename='scripts/produtos.js') }}"></script>
-  <script src="{{ url_for('static',filename='scripts/home.js') }}"></script>
+  <!-- <script src="static/scripts/global.js"></script> -->
+  <script src="static/scripts/produtos.js"></script>
+  <script src="static/scripts/home.js"></script>
+  <!-- <script src="static/scripts/pesquisar.js"></script> -->
   {% endblock %}
-
 </body>
 </html>

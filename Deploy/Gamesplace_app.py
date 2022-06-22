@@ -158,6 +158,7 @@ def request_loader(request):
 def cadastro():
     # ver um modo mais eficiente de persistir o status da página e o código da
     # validação para a próxima etapa
+    #talvez com arquivo json??
     global is_validation
     global verify_code
     global User_data
@@ -172,7 +173,7 @@ def cadastro():
             if(not email_exists):
                 for i in range(4):
                     verify_code+=str(randint(0, 9))
-                print(f'Código: {verify_code}')
+                # print(f'Código: {verify_code}')#DEBUG
 
                 msg = Message(
                 subject= 'Verificação de email - Gamesplace',
@@ -186,7 +187,9 @@ def cadastro():
                 is_validation = 'email_verify'
                 return render_template('landing_pages/html/email_verify.html')
             else:
-                return redirect(url_for('error', error='Usuário já existe! Tente outro email'))
+                flash('Usuário já existe! Tente outro email')
+                return redirect(url_for('cadastro'))
+                #return redirect(url_for('error', error='Usuário já existe! Tente outro email'))
 
         elif(is_validation == 'email_verify'):
             try:
@@ -196,13 +199,15 @@ def cadastro():
                     if(email_code == verify_code):
                         try:
                             db.inserir_user(User_data)
-                            print('inserido!')
+                            # print('inserido!')#DEBUG
+
                             #inserir o valor perfil no HTML (será mostrado o usuário no canto)
-                            # flash('Cadastro concluído!')
+                            flash('Cadastro concluído!')
                             return redirect(url_for('home'))
 
                         except psycopg2.errors.UniqueViolation:
-                            return redirect(url_for('error', error='Usuário já existe! Tente outro email'))
+                            flash('Usuário já existe! Tente outro email')
+                            return redirect(url_for('cadastro'))
 
                         finally:
                             #encerra a comunicação com o banco de dados independente do resultado
@@ -214,13 +219,17 @@ def cadastro():
 
                     else:
                         print('Código inválido')
-                        #Substituir essa página por
-                        return redirect(url_for('error', error='Código inválido!'))
+
+                        flash('Código inválido!')
+                        return redirect(url_for('cadastro'))
 
                         #popup flash nessa página
-                        # return redirect(url_for('cadastro'))
+                        flash('Código de validação inválido')
+                        return redirect(url_for('cadastro'))
             except werkzeug.exceptions.BadRequestKeyError:
-                return redirect(url_for('error', error='Página recarregada!'))
+                flash('Página recarregada!')
+                return redirect(url_for('cadastro'))
+
 
         else:
             return render_template('landing_pages/html/page_error.html', status_code='002',
@@ -252,30 +261,27 @@ def login():
                     User_token.id = email
                     login_user(User_token, remember=lembra_user)
 
-                    # flash('Login concluído!')
+                    flash('Login concluído!')
                     #popup flash nessa página
                     return redirect(url_for('home'))
 
                 else:
-                    # flash('Senha incorreta!')
+                    flash('Senha incorreta!')
                     #popup flash nessa página
                     return redirect(url_for('login'))
 
             #se Auth_tokens == None
             else:
-                #Substituir essa página por
-                return redirect(url_for('error', error='Usuário não encontrado no cadastro!'))
 
             #enviar um popup
-                # flash('Usuário não encontrado!')
+                flash('Usuário não encontrado!')
                 #popup flash nessa página
-                # return redirect(url_for('login'))
+                return redirect(url_for('login'))
         except TypeError:
-            return redirect(url_for('error', error='Usuário não encontrado'))
                 #enviar um popup
-                    # flash('Usuário não encontrado!')
+                    flash('Usuário não encontrado!')
                     #popup flash nessa página
-                    # return redirect(url_for('login'))
+                    return redirect(url_for('login'))
 
         #encerra a comunicação com o banco de dados independente do resultado
         finally:
@@ -289,22 +295,22 @@ def login():
 def logout():
     logout_user()
     #enviar um popup
-    # flash('Conta desconectada com sucesso!')
+    flash('Conta desconectada com sucesso!')
     #popup flash nessa página
     return redirect(url_for('home'))
 
 #-----------------------------------<Erros>------------------------------------#
 
-#Página de erro - Trocar no futuro por popups flash
-@app.route('/error', methods = ['GET', 'POST'])
-def error():
-
-    try:
-        error = request.args['error']
-    except:
-        error = 'O erro deu erro :D'
-
-    return render_template('error.html', error=error)
+# #Página de erro - Trocar no futuro por popups flash
+# @app.route('/error', methods = ['GET', 'POST'])
+# def error():
+#
+#     try:
+#         error = request.args['error']
+#     except:
+#         error = 'O erro deu erro :D'
+#
+#     return render_template('error.html', error=error)
 
 def alter_code(e):
     global status_code
@@ -342,25 +348,44 @@ app.register_error_handler(505, alter_code)
 #--------------------------------<Marketplace>---------------------------------#
 @app.route('/', methods = ['GET', 'POST'])
 def home():
-    #comms = conectar_banco()
-    #cursor = comms.cursor()
+
+    #Sugestões de autocomplete na barra de pesquisa
+    sugestions = ['PS4', 'PS3', 'PlayStation4', 'PlayStation3', 'PlayStation',
+    'Xbox One', 'Xbox360', 'Xbox', 'Switch', 'Nintendo Switch', 'Nintendo', '3DS',
+    'Nintendo 3DS']
+
+
+
         #Elementos que podem ser enviados ao banco de dados:
-            #Produto (Título)
-            #Preço
+            #Produto (Título) - Ok
+            #Preço - Ok
             #Fotos (Caminho das imagens, talvez)
             #Estado do anúncio (aberto, encerrado)
-    return render_template('landing_pages/html/home.html')
+    return render_template('landing_pages/html/home.html', sugestions=sugestions)
     #return 'Página do Marketplace: Não implementada ainda'
 
 #página de produtos
 @app.route('/pag_produtos/<path:path>', methods = ['GET', 'POST'])
 def pag_produtos(path):
-    return render_template(f'landing_pages/html/pag_produtos/{path}')
+    #Sugestões de autocomplete na barra de pesquisa
+    #tentar captar o nome dos produtos existentes (arquivo produtos.js)
+    sugestions = ['inserir sugestões de autocomplete aqui']
+    return render_template(f'landing_pages/html/pag_produtos/{path}')#, sugestions=sugestions)
 
+#Carrinho
+@app.route('/carrinho.html', methods = ['GET', 'POST'])
+def carrinho():
+    #Sugestões de autocomplete na barra de pesquisa
+    sugestions = ['PS4', 'PS3', 'PlayStation4', 'PlayStation3', 'PlayStation',
+    'Xbox One', 'Xbox360', 'Xbox', 'Switch', 'Nintendo Switch', 'Nintendo', '3DS',
+    'Nintendo 3DS']
+    return render_template('landing_pages/html/carrinho.html', sugestions=sugestions)
 
 #-----------------------------------<Fórum>------------------------------------#
 @app.route('/forum', methods = ['GET', 'POST'])
 def forum():
+    sugestions = ['salve', 'aoba', 'teste1']
+
     #comms = conectar_banco()
     #cursor = comms.cursor()
     #Elementos que podem ser enviados ao banco de dados:
@@ -373,8 +398,16 @@ def forum():
         #verificar autorização do usuário (se pode postar ou responder)
         #Usar o current_user.is_authenticated
 
-    return render_template('landing_pages/html/page_error.html', status_code='???',
-    complete_status= 'Página do Fórum: Não implementada ainda')
+    return render_template('landing_pages/html/forum.html', sugestions=sugestions)
+
+@app.route('/forum/<string:thread_escolhida>')
+def forum_thread(thread_escolhida):
+    # thread será um modelo básico, que será completado com os dados do fórum,
+    # de acordo com os arquivos js (ou json)
+    sugestions = ['1', '2', 'teste1']
+
+    return render_template('landing_pages/html/thread.html',sugestions=sugestions,
+    thread=thread_escolhida)
 
 
 #------------------------------<Testes e devtools>-----------------------------#
@@ -395,12 +428,15 @@ def view_signatures():
     complete_status= lista_db)
 
 
+
 #fins de teste
 
 #Descomentar a linha abaixo para habilitar a rota de testes(/teste)
 # @app.route('/teste', methods = ['POST', 'GET'])
 # @login_required #Para fazer teste com página protegida, descomente essa também
 def teste():
+
+        #Teste para envio de emails
 
     # msg = Message(
     # subject= 'Verificação de email - Gamesplace (Teste2)',
@@ -410,24 +446,6 @@ def teste():
     # mail.send(msg)
 
     return render_template('landing_pages/html/corpo_email.html', verify_code= '1234')
-
-    # print(f'current_user: {current_user}')
-    # print(f'current_user.id: {current_user.id}')
-    # print(f'current_user.is_authenticated: {current_user.is_authenticated}')
-    # return render_template('teste_login.html')
-    # comms = conectar_banco()
-    # cursor = comms.cursor()
-    # # return f'User {User} e Senha {Senha}'
-    # #try:
-    # if(request.method == 'POST'):# or request.method == 'GET'):
-    #     #print(request.form('User'))
-    #     return render_template('index.html',
-    #      User_HTML = request.form('User'),
-    #      Senha_HTML = request.form('Senha'))
-    # else:
-        # return render_template('index.html', User_HTML = 'Usuário', Senha_HTML = 'Senha')
-
-
 
 #Processo para que todo o backend e estrutura do site sejam executados ao
 #rodar esse arquivo python

@@ -2,8 +2,8 @@
 
 class app_config():
     secret_key = 'insert_secret_key'
-    static_folder = 'Back-end/static'
-    template_folder = 'Back-end/templates'
+    static_folder = 'static'
+    template_folder = 'templates'
 
 #Banco de dados
 class db_config():

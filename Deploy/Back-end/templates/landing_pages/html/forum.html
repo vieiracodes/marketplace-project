@@ -1,0 +1,39 @@
+{% extends "navbar.html" %}
+
+    <!-- Herança da tag head - Incluso css global e imagem da logo  -->
+    {% block head %}
+    {{ super() }}
+    <title>Fórum</title>
+    {% endblock %}
+
+<body>
+
+    <!-- Herança do popup de status  -->
+    {% block popup %}
+    {{ super() }}
+    {% endblock %}
+
+    <!-- Herança da navbar -->
+    {% block header %}
+    {{ super() }}
+    <!-- Herança do botão do carrinho (tá bugado, então vai herdar junto com o block header)-->
+
+    {% endblock %}
+
+  {% block main %}
+   <h1> Página inicial do fórum - em construção</h1>
+
+  {% endblock %}
+
+  <!-- Herança de informações de rodapé -->
+  {% block footer %}
+  {{ super() }}
+  {% endblock %}
+
+  <!-- Herança de scripts - global e pesquisar  -->
+  {% block scripts %}
+  {{ super() }}
+  {% endblock %}
+
+</body>
+</html>

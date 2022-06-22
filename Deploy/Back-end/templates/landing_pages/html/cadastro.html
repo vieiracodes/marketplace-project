@@ -10,22 +10,34 @@
     <link rel="stylesheet" href="static/styles/global.css">
 </head>
 <body>
-  <!-- implementação do popup -->
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <ul class=flashes>
-        {% for message in messages %}
-        <div colour="green" role="alert">
-          {{ message }}
-        </div>
-        {% endfor %}
-        </ul>
-    {% endif %}
-  {% endwith %}
+
 
   <form action="/cadastro" method="post">
     <div class="caixa_login">
         <h1 class="sub-titulo">Cadastrar</h1>
+        <!-- popup de status -->
+
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul>
+              {% for message in messages %}
+              <div style="
+              /* estilo de teste */
+              /* ver de inserir no global.css */
+              color: white;
+              padding: 5px 7px 5px 7px;
+              margin-top: -10px;
+              margin-bottom: 10px;
+              background-color: #2196ff;
+              border-radius: 5px;
+              box-shadow: 3px 4px 7px rgba(0, 0, 0, 0.356);">
+                {{ message }}
+              </div>
+              {% endfor %}
+              </ul>
+          {% endif %}
+        {% endwith %}
+        
         <input type="text" name="email" id="email" placeholder="Digite seu E-mail">
         <input type="password" name="password" id="password" placeholder="Insira a Senha">
         <button type="submit" id="prosseguir" name="prosseguir">Cadastrar</button>
