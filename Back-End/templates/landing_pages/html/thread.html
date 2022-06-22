@@ -21,7 +21,50 @@
     {% endblock %}
 
   {% block main %}
-   <h1>thread - {{thread}}</h1>
+  <!-- Formatar o html e o css bonitinho -->
+  <!-- Título e dados da thread -->
+  <span style="color: green;">
+      <h1>Title {{comments[num_thread]['Thread_OP']['Thread.title']}}</h1>
+      <br>
+      <h2>User {{comments[num_thread]['Thread_OP']['Thread.OP_user']}}</h2>
+      <h3>Descricao {{comments[num_thread]['Thread_OP']['Thread.description']}}<h3>
+      <br>
+  </span>
+
+
+
+   {% if comments[num_thread]['Thread_comments'] != {} %}
+
+     {% for comment in comments[num_thread]['Thread_comments'] %}
+      <script type="text/javascript">
+        console.log({{comment}})
+      </script>
+       <div style="color:yellow;">
+        <h3>Comentário:</h3>
+        <h2> {{comments[num_thread]['Thread_comments'][comment]['Thread.user']}}</h2>
+        <h2> {{comments[num_thread]['Thread_comments'][comment]['Thread.description']}}<h2>
+       </div>
+     <br>
+     {% endfor %}
+   {% else %}
+   <div style="color:yellow;">
+     <h2>Não há comentários nessa thread ainda. Seja o primeiro!</h2>
+   </div>
+
+   {% endif %}
+
+   <form action="/forum/{{num_thread}}/{{thread}}" method="post">
+     <textarea name="comentario" rows="8" cols="80" placeholder="Insira o comentário"></textarea>
+     <button style="
+     color:white;
+     background-color: #2196ff;
+     padding: 10px 10px 10px 10px;
+     background-color: #219600;
+     border-radius: 5px;
+     box-shadow: 3px 4px 7px rgba(0, 0, 0, 0.356);"
+     type="submit" id="comentar" name="comentar" value="comentar">Comentar</button>
+   </form>
+
 
   {% endblock %}
 

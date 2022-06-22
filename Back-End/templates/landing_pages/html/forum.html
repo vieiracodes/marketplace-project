@@ -21,8 +21,39 @@
     {% endblock %}
 
   {% block main %}
-   <h1> Página inicial do fórum - em construção</h1>
 
+     <!-- Formatar o html e o css bonitinho -->
+     <h1> Página inicial do fórum - em construção</h1>
+     <br>
+     <a href="/forum/criar_thread" style="
+     color:white;
+     background-color: #2196ff;
+     padding: 10px 10px 10px 10px;
+     background-color: #219600;
+     border-radius: 5px;
+     box-shadow: 3px 4px 7px rgba(0, 0, 0, 0.356);"
+     ">Criar nova thread</a>
+     <br>
+     <br>
+     {% if threads %}
+       {% for thread in threads %}
+
+       <a href="forum/{{thread}}/{{(threads[thread]['Thread_OP']['Thread.title'])}}" style="color:white;">
+         <h1> {{threads[thread]['Thread_OP']['Thread.title']}}</h1>
+         <h3> {{threads[thread]['Thread_OP']['Thread.description']}}</h3>
+         <h4> Aberto por: {{threads[thread]['Thread_OP']['Thread.OP_user']}}</h4>
+         <h4> status:{{threads[thread]['Thread_OP']['Thread.status']}}</h4>
+       </a>
+       <br>
+
+       {% endfor %}
+     {% else %}
+     <h2> Nenhuma thread no momento :( </h2>
+     {% endif %}
+     <!-- <form action="/forum/criar_thread" method="post"> -->
+
+       <!-- <button name="Criar_thread">Criar nova thread</button> -->
+     <!-- </form> -->
   {% endblock %}
 
   <!-- Herança de informações de rodapé -->

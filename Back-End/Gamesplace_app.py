@@ -1,7 +1,7 @@
 #-------------------------------<Configurações>--------------------------------#
 
 # Core do aplicativo
-from flask import Flask, request, redirect, url_for, render_template, flash
+from flask import Flask, request, redirect, url_for, render_template, flash, abort
 
 #Sistema de login e autenticação - Expansão flask
 from flask_login import (LoginManager, UserMixin, login_user, logout_user,
@@ -25,9 +25,10 @@ import psycopg2
 
 #arquivo de configuração de variáveis de ambiente e outros dados usados no programa
 from config import app_config, db_config, Config_email
-
+from Fórum.Fórum import Forum_thread
 #Para tratamento de erros e exceções
 import werkzeug.exceptions
+import jinja2.exceptions
 
 
 #Importação de variáveis de ambiente e outras configurações, caso necessário
@@ -128,6 +129,7 @@ class Banco_de_dados():
         return lista_banco
 
 db = Banco_de_dados()
+forum_methods = Forum_thread()
 
 
 #decoradores de user_loader e request_loader, usados pelo flask_login
@@ -385,29 +387,70 @@ def carrinho():
 @app.route('/forum', methods = ['GET', 'POST'])
 def forum():
     sugestions = ['salve', 'aoba', 'teste1']
+    threads = forum_methods.Get_threads()
+
 
     #comms = conectar_banco()
     #cursor = comms.cursor()
     #Elementos que podem ser enviados ao banco de dados:
-        #Perguntas (Título)
-        #Perguntas (Explicação)
+        #Perguntas (Título) - OK
+        #Perguntas (Explicação) - OK
         #Respostas
-        #Estado do 'post'/pergunta(aberto, encerrado)
+        #Estado do 'post'/pergunta(aberto, encerrado) - OK
         #Usuários que publicaram perguntas e respostas
 
         #verificar autorização do usuário (se pode postar ou responder)
         #Usar o current_user.is_authenticated
 
-    return render_template('landing_pages/html/forum.html', sugestions=sugestions)
+    return render_template('landing_pages/html/forum.html', sugestions=sugestions,
+    threads=threads)
 
-@app.route('/forum/<string:thread_escolhida>')
-def forum_thread(thread_escolhida):
+@app.route('/forum/criar_thread', methods =['GET','POST'])
+def criar_thread():
+    sugestions = ['salve', 'aoba', 'teste1']
+    if(request.method == 'POST'):
+        if(request.form['concluir_ct'] == 'concluir_ct'):
+            if(current_user.id != None):
+                titulo = request.form['titulo']
+                descricao = request.form['descricao']
+                forum_methods.Criar_thread(current_user.id, titulo, descricao)
+                flash('Thread criada!')
+                #ver de redirecionar já pra página da thread
+                return redirect(url_for('forum'))
+            else:
+                flash('Faça login para poder abrir threads!')
+                return redirect(url_for('forum'))
+
+    return render_template('landing_pages/html/criar_thread.html',sugestions=sugestions)
+
+
+
+@app.route('/forum/<string:num_thread>/<string:thread_escolhida>', methods = ['GET', 'POST'])
+def forum_thread(num_thread, thread_escolhida):
     # thread será um modelo básico, que será completado com os dados do fórum,
     # de acordo com os arquivos js (ou json)
-    sugestions = ['1', '2', 'teste1']
+    try:
+        sugestions = ['1', '2', 'teste1']
+        comments = forum_methods.Get_threads()#{"Threads": {'1':{}}}
 
-    return render_template('landing_pages/html/thread.html',sugestions=sugestions,
-    thread=thread_escolhida)
+        if(request.method == 'POST'):
+            if(current_user.id != None):
+
+                comentario = request.form['comentario']
+                forum_methods.Comentar(current_user.id, comentario, num_thread)
+                flash('Comentário enviado!')
+                #ver de redirecionar já pra página da thread
+                comments = forum_methods.Get_threads()
+                return redirect(url_for('forum_thread',thread_escolhida=thread_escolhida, num_thread=num_thread))
+            else:
+                flash('Faça login para poder comentar!')
+                return redirect(url_for('forum'))
+
+
+        return render_template('landing_pages/html/thread.html',sugestions=sugestions,
+        thread=thread_escolhida, num_thread=num_thread, comments=comments)
+    except jinja2.exceptions.UndefinedError:
+        return abort(404)
 
 
 #------------------------------<Testes e devtools>-----------------------------#

@@ -1,0 +1,49 @@
+{% extends "navbar.html" %}
+
+    <!-- Herança da tag head - Incluso css global e imagem da logo  -->
+    {% block head %}
+    {{ super() }}
+    <title>Criar thread</title>
+    {% endblock %}
+
+<body>
+
+    <!-- Herança do popup de status  -->
+    {% block popup %}
+    {{ super() }}
+    {% endblock %}
+
+    <!-- Herança da navbar -->
+    {% block header %}
+    {{ super() }}
+    <!-- Herança do botão do carrinho (tá bugado, então vai herdar junto com o block header)-->
+
+    {% endblock %}
+
+  {% block main %}
+  <!-- Formatar o html e o css bonitinho -->
+   <h1>Criar thread</h1>
+   <br>
+   <form class="" action="/forum/criar_thread" method="post">
+     <input type="text" name="titulo" id="titulo" placeholder="Insira o titulo">
+     <textarea name="descricao" rows="8" cols="80" placeholder="Insira a explicação"></textarea>
+     <button type="submit" id="concluir_ct" name="concluir_ct" value="concluir_ct">Finalizar</button>
+
+   </form>
+
+
+
+  {% endblock %}
+
+  <!-- Herança de informações de rodapé -->
+  {% block footer %}
+  {{ super() }}
+  {% endblock %}
+
+  <!-- Herança de scripts - global e pesquisar  -->
+  {% block scripts %}
+  {{ super() }}
+  {% endblock %}
+
+</body>
+</html>
