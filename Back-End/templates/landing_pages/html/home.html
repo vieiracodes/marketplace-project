@@ -11,23 +11,46 @@
 </head>
 <body>
 <!-- Teste - Código Jinja para exibição de status do login -->
-  <!-- {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <ul class=flashes>
-        {% for message in messages %}
-        <div colour="green" role="alert">
-          {{ message }}
-        </div>
-        {% endfor %}
-        </ul>
-    {% endif %}
-  {% endwith %} -->
+<!-- popup de status -->
+
+
+<div style="
+/* estilo de teste */
+/* ver de inserir no global.css */
+position: relative;
+bottom: 15px;
+right: 10px;
+padding: 10px 21px 10px 14px;
+margin-top: -10px;
+margin-bottom: 10px;
+background-color: #2196ff;
+border-radius: 5px;
+box-shadow: 3px 4px 7px rgba(0, 0, 0, 0.356);">
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+      {% for message in messages %}
+      <span style="color: white;">{{ message }}</span>
+
+      <span style="
+        position: absolute;
+        padding-left: 7px;
+        top: 3px;
+        right: 5px;
+        color: white;
+        font-size: 17px;
+        cursor: pointer;"
+        onclick="this.parentElement.style.display='none';">x</span>
+      {% endfor %}
+  {% endif %}
+{% endwith %}
+</div>
+
 
   <header>
       <nav id="menu_g-place">
           <ul>
               <li><a href="/"><img src="static/sources/images/global/g_place-logo.png" alt="Gamers_Place-logo" draggable="false" id="logo"></a></li>
-              <li class="container-input"><input type="text" id="barra_pesquisa" oninput="autoComplete()"><button id="barra_pesquisa_confirm"><img src="static/sources/images/global/searchmagnifierinterfacesymbol1_79893.svg" alt=""></button></li>
+              <li class="container-input"><input type="text" id="barra_pesquisa" oninput="autoComplete({{sugestions}})"><button id="barra_pesquisa_confirm"><img src="static/sources/images/global/searchmagnifierinterfacesymbol1_79893.svg" alt=""></button></li>
 
               <div class="search-login-cart">
                   <div class="menu-icon">
@@ -54,7 +77,7 @@
                             {% if not (current_user.id != None and current_user.is_authenticated) %}
                             _blank
                             {% endif %}">
-                            
+
                               <p>{% if (current_user.id != None and current_user.is_authenticated) %}
                               Olá, {{ current_user.id }}!
                               {% else %}
@@ -73,8 +96,7 @@
           <p class="titulo">Destaques</p>
           <div>
               <div class="destaques">
-                  <!-- <a href="static/final-fantasy-7-remake"> -->
-                  <a href="pag_produtos/final-fantasy-7-remake.html">
+                      <a href="pag_produtos/final-fantasy-7-remake.html">
                       <img src="static/sources/images/products/final-fantasy-vii-remake.jpg" alt="01" name="img01" draggable="false" class="slides" id="passaSlide">
                   </a>
 
