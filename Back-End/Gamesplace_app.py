@@ -429,28 +429,52 @@ def criar_thread():
 def forum_thread(num_thread, thread_escolhida):
     # thread será um modelo básico, que será completado com os dados do fórum,
     # de acordo com os arquivos js (ou json)
+
     try:
-        sugestions = ['1', '2', 'teste1']
-        comments = forum_methods.Get_threads()#{"Threads": {'1':{}}}
+        #Se digitar o título(thread_escolhida) errado
+        if(forum_methods.Get_threads()[num_thread]["Thread_OP"]["Thread.title"] == thread_escolhida):
 
-        if(request.method == 'POST'):
-            if(current_user.id != None):
+            sugestions = ['1', '2', 'teste1']
+            comments = forum_methods.Get_threads()#{"Threads": {'1':{}}}
 
-                comentario = request.form['comentario']
-                forum_methods.Comentar(current_user.id, comentario, num_thread)
-                flash('Comentário enviado!')
-                #ver de redirecionar já pra página da thread
-                comments = forum_methods.Get_threads()
-                return redirect(url_for('forum_thread',thread_escolhida=thread_escolhida, num_thread=num_thread))
-            else:
-                flash('Faça login para poder comentar!')
-                return redirect(url_for('forum'))
+            if(request.method == 'POST'):
+                if(current_user.id != None):
+                    #Fechar thread
+                    if(request.form['fechar_thread'] == "Fechado"):
+                        forum_methods.Editar_dado(num_thread, 'Thread.status', request.form['fechar_thread'])
+
+                    #Reabrir thread
+                    elif(request.form['fechar_thread'] == "Aberto"):
+                        forum_methods.Editar_dado(num_thread, 'Thread.status', request.form['fechar_thread'])
+
+                    #Excluir thread
+                    elif(request.form['excluir_thread'] == 'excluir_thread'):
+                        pass
+                    #Comentar
+                    elif(request.form['comentar'] == 'comentar'):
+                        comentario = request.form['comentario']
+                        forum_methods.Comentar(current_user.id, comentario, num_thread)
+                        flash('Comentário enviado!')
+                        #ver de redirecionar já pra página da thread
+                        comments = forum_methods.Get_threads()
+                    return redirect(url_for('forum_thread',thread_escolhida=thread_escolhida, num_thread=num_thread))
+                else:
+                    flash('Faça login para poder comentar!')
+                    return redirect(url_for('forum'))
 
 
-        return render_template('landing_pages/html/thread.html',sugestions=sugestions,
-        thread=thread_escolhida, num_thread=num_thread, comments=comments)
+            return render_template('landing_pages/html/thread.html',sugestions=sugestions,
+            thread=thread_escolhida, num_thread=num_thread, comments=comments)
+        else:
+            return abort(404)
+
+    #Garantia de que vai dar erro 404 se o link estiver errado
     except jinja2.exceptions.UndefinedError:
-        return abort(404)
+          return abort(404)
+
+    #Se digitar o número da thread (num_thread) errado
+    except KeyError:
+          return abort(400) 
 
 
 #------------------------------<Testes e devtools>-----------------------------#

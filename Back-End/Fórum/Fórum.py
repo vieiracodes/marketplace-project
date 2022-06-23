@@ -61,3 +61,16 @@ class Forum_thread():
         with open('Back-End/static/json/forum.json', 'r+') as post_data:
             self.thread_topics = json.load(post_data)['Threads']
         return self.thread_topics
+
+    def Editar_dado(self, num_thread, dado, novo_dado):
+        with open('Back-End/static/json/forum.json', 'r+') as post_data:
+            try:
+                post_json = json.load(post_data)
+            # Fazer um sistema de exceções mais específicas posteriormente
+            except:
+                print('erro')
+
+            post_json["Threads"][num_thread]["Thread_OP"][dado] = novo_dado
+
+            with open('Back-End/static/json/forum.json', 'w') as post_save:
+                json.dump(post_json, post_save, indent = 3)

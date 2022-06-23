@@ -36,9 +36,6 @@
    {% if comments[num_thread]['Thread_comments'] != {} %}
 
      {% for comment in comments[num_thread]['Thread_comments'] %}
-      <script type="text/javascript">
-        console.log({{comment}})
-      </script>
        <div style="color:yellow;">
         <h3>Comentário:</h3>
         <h2> {{comments[num_thread]['Thread_comments'][comment]['Thread.user']}}</h2>
@@ -65,7 +62,40 @@
      type="submit" id="comentar" name="comentar" value="comentar">Comentar</button>
    </form>
 
+     {% if current_user.id == comments[num_thread]['Thread_OP']['Thread.OP_user'] %}
+     <form action="/forum/{{num_thread}}/{{thread}}" method="post">
+     <!-- Para fechar a thread -->
+     {% if comments[num_thread]['Thread_OP']['Thread.status'] == 'Aberto' %}
+           <button style="
+           color:white;
+           padding: 10px 10px 10px 10px;
+           background-color: #ff0500;
+           border-radius: 5px;
+           box-shadow: 3px 4px 7px rgba(0, 0, 0, 0.356);"
+           type="submit" id="fechar_thread" name="fechar_thread" value="Fechado">
+           Fechar thread</button>
 
+      <!-- Para abrir a thread -->
+      {% else %}
+          <button style="
+          color:white;
+          padding: 10px 10px 10px 10px;
+          background-color: #219600;
+          border-radius: 5px;
+          box-shadow: 3px 4px 7px rgba(0, 0, 0, 0.356);"
+          type="submit" id="fechar_thread" name="fechar_thread" value="Aberto">
+          Abrir thread</button>
+      {% endif%}
+
+     <button style="
+     color:white;
+     padding: 10px 10px 10px 10px;
+     background-color: #ff0500;
+     border-radius: 5px;
+     box-shadow: 3px 4px 7px rgba(0, 0, 0, 0.356);"
+     type="button" id="excluir_thread" name="excluir_thread", value="excluir_thread">Excluir Thread(Não implementado)</button>
+     </form>
+     {% endif %}
   {% endblock %}
 
   <!-- Herança de informações de rodapé -->
