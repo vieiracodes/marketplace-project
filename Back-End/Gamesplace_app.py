@@ -346,7 +346,6 @@ app.register_error_handler(504, alter_code)
 app.register_error_handler(505, alter_code)
 
 
-
 #--------------------------------<Marketplace>---------------------------------#
 @app.route('/', methods = ['GET', 'POST'])
 def home():
@@ -388,6 +387,7 @@ def carrinho():
 def forum():
     sugestions = ['salve', 'aoba', 'teste1']
     threads = forum_methods.Get_threads()
+    # print(f'Anônimo?: {current_user.is_anonymous}')
 
 
     #comms = conectar_banco()
@@ -395,7 +395,7 @@ def forum():
     #Elementos que podem ser enviados ao banco de dados:
         #Perguntas (Título) - OK
         #Perguntas (Explicação) - OK
-        #Respostas
+        #Respostas - OK
         #Estado do 'post'/pergunta(aberto, encerrado) - OK
         #Usuários que publicaram perguntas e respostas
 
@@ -423,6 +423,12 @@ def criar_thread():
 
     return render_template('landing_pages/html/criar_thread.html',sugestions=sugestions)
 
+@app.route('/forum/delete_comment/<string:num_thread>/<string:thread_escolhida>/<string:num_post>', methods =['POST'])
+def delete_comment(num_thread, thread_escolhida, num_post):
+    forum_methods.Excluir_comment(num_thread, num_post)
+    return redirect(url_for('forum_thread',thread_escolhida=thread_escolhida, num_thread=num_thread))
+
+
 
 
 @app.route('/forum/<string:num_thread>/<string:thread_escolhida>', methods = ['GET', 'POST'])
@@ -439,24 +445,38 @@ def forum_thread(num_thread, thread_escolhida):
 
             if(request.method == 'POST'):
                 if(current_user.id != None):
+                #Para o criador do tópico (e posteriomente, algum ADM)
                     #Fechar thread
-                    if(request.form['fechar_thread'] == "Fechado"):
+                    if(request.form.get('fechar_thread', 'None') == "Fechado"):
                         forum_methods.Editar_dado(num_thread, 'Thread.status', request.form['fechar_thread'])
 
                     #Reabrir thread
-                    elif(request.form['fechar_thread'] == "Aberto"):
+                    elif(request.form.get('fechar_thread', 'None') == "Aberto"):
                         forum_methods.Editar_dado(num_thread, 'Thread.status', request.form['fechar_thread'])
 
                     #Excluir thread
-                    elif(request.form['excluir_thread'] == 'excluir_thread'):
-                        pass
+                    elif(request.form.get('excluir_thread', 'None') == 'excluir_thread'):
+                        forum_methods.Excluir_thread(num_thread)
+                        return redirect(url_for('forum'))
+
+                    # #Excluir comentário
+
+                    #Pensar numa maneira mais eficiente de fazer isso
+                    #atualmente, está fazendo pela rota delete_comment
+                    
+                    # elif(request.form.get('excluir', 'None') == 'excluir_comentário'):
+                    #     forum_methods.Excluir_comment(request.form['excluir'])
+
+                #Para todos os usuários logados
                     #Comentar
-                    elif(request.form['comentar'] == 'comentar'):
+                    elif(request.form.get('comentar', 'None') == 'comentar'):
+                        print('comentou')
                         comentario = request.form['comentario']
                         forum_methods.Comentar(current_user.id, comentario, num_thread)
                         flash('Comentário enviado!')
                         #ver de redirecionar já pra página da thread
                         comments = forum_methods.Get_threads()
+
                     return redirect(url_for('forum_thread',thread_escolhida=thread_escolhida, num_thread=num_thread))
                 else:
                     flash('Faça login para poder comentar!')
@@ -465,16 +485,20 @@ def forum_thread(num_thread, thread_escolhida):
 
             return render_template('landing_pages/html/thread.html',sugestions=sugestions,
             thread=thread_escolhida, num_thread=num_thread, comments=comments)
+        #Tópico existe, mas o titulo foi digitado errado: erro 404
         else:
-            return abort(404)
+            return render_template('landing_pages/html/page_error_forum.html', status_code='Página não encontrada',
+             complete_status= f'404 - Página não encontrada', detalhamento='O link pode ter sido digitado errado')
+
 
     #Garantia de que vai dar erro 404 se o link estiver errado
     except jinja2.exceptions.UndefinedError:
           return abort(404)
 
-    #Se digitar o número da thread (num_thread) errado
+    #Se digitar o número da thread (num_thread) errado: erro 410
     except KeyError:
-          return abort(400) 
+         return render_template('landing_pages/html/page_error_forum.html', status_code='410',
+         complete_status= f'410 - Página não existe', detalhamento='O tópico procurado pode ter sido excluido')
 
 
 #------------------------------<Testes e devtools>-----------------------------#
@@ -501,6 +525,7 @@ def view_signatures():
 #Descomentar a linha abaixo para habilitar a rota de testes(/teste)
 # @app.route('/teste', methods = ['POST', 'GET'])
 # @login_required #Para fazer teste com página protegida, descomente essa também
+# @app.route('/solicitar_post_apenas', methods = ['POST'])
 def teste():
 
         #Teste para envio de emails
@@ -511,11 +536,12 @@ def teste():
     # html= render_template('landing_pages/html/corpo_email.html', verify_code='1111')
     # )
     # mail.send(msg)
-
+    # return render_template('landing_pages/html/page_error.html', status_code='???',
+    # complete_status= f'??? - Só solicitações post')
     return render_template('landing_pages/html/corpo_email.html', verify_code= '1234')
 
 #Processo para que todo o backend e estrutura do site sejam executados ao
 #rodar esse arquivo python
 
 if (__name__ == '__main__'):
-    app.run(debug= True)
+    app.run(debug= True)#, host = "0.0.0.0")

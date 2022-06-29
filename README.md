@@ -7,13 +7,14 @@ Cada afazer realizado, **por favor marque copie e cole o " ✔️ " na frente !!
 Caso necessário, **coloque o icone " ⚠️ " na frente para definir prioridade**
 
 ## Site no geral:
-  `Hospedagem `
+  `<Hospedagem>`
       Pesquisar servidores (se gratuitos, melhor) ✔️
       Devem possuir suporte a banco de dados e back-end python✔️
         Algumas Opções:
         -Vercel
         -Heroku ✔️
         -InfinityFree
+  `</Hospedagem>`
 
 
 ## Front-End:
@@ -53,6 +54,16 @@ Caso necessário, **coloque o icone " ⚠️ " na frente para definir prioridade
 
   `</pag_adm>`
 
+
+  `<forum>`
+
+    Criar o layout do forum (e as subpáginas dos tópicos e criação de threads) ✔️
+    Criar o CSS da pág forum (e as subpáginas dos tópicos e criação de threads)
+    Criar animações e interatividade utilizando Js
+
+
+  `</forum>`
+
 ## Back-End:
 
   `def pag_login()` {
@@ -75,11 +86,11 @@ Caso necessário, **coloque o icone " ⚠️ " na frente para definir prioridade
 
   `def forum()` {
 
-    Criar sistema para abertura de posts
-    Criar sistema para postagem de comentários (resposta a posts)
-    Criar sistema para exibir status do post (aberto, fechado, redundante)
-    Criar sistema para exibir usuários que publicaram as perguntas e respostas
-    Sistema de permissões para publicar e responder posts
+    Criar sistema para abertura de posts(só quem estiver logado) ✔️
+    Criar sistema para postagem de comentários (resposta a posts) ✔️
+    Criar sistema para exibir (e também alterar) status do post (aberto, fechado, redundante) ✔️
+    Criar sistema para exibir usuários que publicaram as perguntas e respostas✔️
+    Sistema de permissões para publicar e responder posts (só quem estiver logado)✔️
 
   }
 

@@ -25,6 +25,13 @@
   <!-- Título e dados da thread -->
   <span style="color: green;">
       <h1>Title {{comments[num_thread]['Thread_OP']['Thread.title']}}</h1>
+      <h2 style="color:
+      {% if comments[num_thread]['Thread_OP']['Thread.status'] == 'Aberto' %}
+      green
+      {% else %}
+      red
+      {% endif %}
+      ;">{{comments[num_thread]['Thread_OP']['Thread.status']}}</h2>
       <br>
       <h2>User {{comments[num_thread]['Thread_OP']['Thread.OP_user']}}</h2>
       <h3>Descricao {{comments[num_thread]['Thread_OP']['Thread.description']}}<h3>
@@ -37,8 +44,17 @@
 
      {% for comment in comments[num_thread]['Thread_comments'] %}
        <div style="color:yellow;">
-        <h3>Comentário:</h3>
-        <h2> {{comments[num_thread]['Thread_comments'][comment]['Thread.user']}}</h2>
+         <!-- variável thread na rota forum/delete_comment é apenas usada para o
+          redirecionamento novamente à thread do fórum-->
+        <h3>Comentário:
+           {% if comments[num_thread]['Thread_comments'][comment]['Thread_user'] == current_user.id %}
+             <button type="submit" style="color: #00bbff;" id=fechar{{comment}}
+             formaction="/forum/delete_comment/{{num_thread}}/{{thread}}/{{comment}}"
+             form="thread_functions" value=excluir_comentário>
+             x</button>
+           {% endif %}
+       </h3>
+        <h2> {{comments[num_thread]['Thread_comments'][comment]['Thread_user']}} publicou:</h2>
         <h2> {{comments[num_thread]['Thread_comments'][comment]['Thread.description']}}<h2>
        </div>
      <br>
@@ -50,8 +66,12 @@
 
    {% endif %}
 
+   <!-- form para as solicitações post -->
+
    <form action="/forum/{{num_thread}}/{{thread}}" method="post">
-     <textarea name="comentario" rows="8" cols="80" placeholder="Insira o comentário"></textarea>
+     <textarea name="comentario" rows="8" cols="80" placeholder="Insira o comentário"
+     {% if comments[num_thread]['Thread_OP']['Thread.status'] == 'Fechado' %}
+     disabled{% endif %}></textarea>
      <button style="
      color:white;
      background-color: #2196ff;
@@ -59,7 +79,9 @@
      background-color: #219600;
      border-radius: 5px;
      box-shadow: 3px 4px 7px rgba(0, 0, 0, 0.356);"
-     type="submit" id="comentar" name="comentar" value="comentar">Comentar</button>
+     type="submit" id="comentar" name="comentar" value="comentar"
+     {% if comments[num_thread]['Thread_OP']['Thread.status'] == 'Fechado' %}
+     disabled{% endif %}>Comentar</button>
    </form>
 
      {% if current_user.id == comments[num_thread]['Thread_OP']['Thread.OP_user'] %}
@@ -75,8 +97,8 @@
            type="submit" id="fechar_thread" name="fechar_thread" value="Fechado">
            Fechar thread</button>
 
-      <!-- Para abrir a thread -->
       {% else %}
+        <!-- Para abrir a thread -->
           <button style="
           color:white;
           padding: 10px 10px 10px 10px;
@@ -93,9 +115,15 @@
      background-color: #ff0500;
      border-radius: 5px;
      box-shadow: 3px 4px 7px rgba(0, 0, 0, 0.356);"
-     type="button" id="excluir_thread" name="excluir_thread", value="excluir_thread">Excluir Thread(Não implementado)</button>
+     type="submit" id="excluir_thread" name="excluir_thread", value="excluir_thread">Excluir Thread(Não implementado)</button>
      </form>
      {% endif %}
+
+     <form id="thread_functions" method="post">
+
+     </form>
+
+
   {% endblock %}
 
   <!-- Herança de informações de rodapé -->
