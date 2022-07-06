@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/global.css') }}">
+      <link rel="shortcut icon" href="{{ url_for('static',filename='sources/images/global/g-place.ico') }}" type="image/x-icon">
+
+    <style>
+      body{
+          background-color: transparent !important;
+          background-image: none !important;
+        }
+    </style>
+
+    {% endblock %}
+</head>
+<body style="color: white;">
+  {% block popup %}
+
+  <!-- Teste - Código Jinja para exibição de status do login -->
+  <!-- popup de status -->
+  {% with messages = get_flashed_messages() %}
+  <div style="
+  /* estilo de teste */
+  /* ver de inserir no global.css */
+  {% if not messages %}
+  display: none;
+  {% endif %}
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  padding: 10px 21px 10px 14px;
+  background-color: #2196ff;
+  border-radius: 5px;
+  box-shadow: 3px 4px 7px rgba(0, 0, 0, 0.356);">
+
+    {% if messages %}
+        {% for message in messages %}
+        <span>{{ message }}</span>
+
+        <span style="
+          position: absolute;
+          padding-left: 7px;
+          top: 3px;
+          right: 5px;
+          font-size: 17px;
+          cursor: pointer;"
+          onclick="this.parentElement.style.display='none';">x</span>
+        {% endfor %}
+    {% endif %}
+  {% endwith %}
+  </div>
+
+  {% endblock %}
+
+  {% block main %}
+
+  {% endblock %}
+
+  {% block scripts %}
+  <script src="{{ url_for('static',filename='scripts/global.js') }}"></script>
+  {% endblock %}
+</body>
+</html>

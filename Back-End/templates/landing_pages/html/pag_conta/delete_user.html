@@ -1,0 +1,32 @@
+{% extends "configs_conta.html" %}
+
+    <!-- Herança da tag head - Incluso css global e imagem da logo  -->
+    {% block head %}
+    {{ super() }}
+    {% endblock %}
+
+<body>
+  {% block main %}
+    <div class="div_main">
+      <!-- Formatar o html e o css bonitinho -->
+      <h1> Deletar Usuário - em construção</h1>
+      <br>
+
+      <form action="/conta/delete_user" method="post"
+      {% if callback_eval["is_target_top"] == True %}
+      target="_top"
+      {% endif %}>
+       <label>Insira a senha:
+       <input type="password" name="senha" placeholder="Insira a senha"></label>
+       <br>
+       <button type="submit" id="delete_user" value="delete_user">Excluir conta</button>
+      </form>
+      <a href="/conta" target="_top">TESTE</a>
+    </div>
+  {% endblock %}
+
+  {% block scripts %}
+  {{ super() }}
+  {% endblock %}
+</body>
+</html>

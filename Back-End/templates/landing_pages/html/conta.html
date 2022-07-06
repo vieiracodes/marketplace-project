@@ -1,0 +1,103 @@
+{% extends "navbar.html" %}
+
+    <!-- Herança da tag head - Incluso css global e imagem da logo  -->
+    {% block head %}
+    {{ super() }}
+    <title>Conta</title>
+
+<!-- Formatar o html e o css bonitinho -->
+    <style>
+      
+     div.nav_horizontal{
+      position:fixed;
+      /* left:30px; */
+      bottom: -0.2vh;
+      background-color: #192635;
+      height:91vh
+    }
+
+     ul.nav_horizontal{
+      list-style-type:none;
+      margin:0;
+      padding:0;
+      width:200px;
+      text-align:center;
+      background-color: #192635;
+    }
+     li.nav_horizontal{
+      /* border: 1px solid #ffffff; */
+      height: 50px;
+      display: flex;
+      margin: auto;
+    }
+    li.nav_horizontal:hover{
+        background-color: #007bff;
+    }
+     a.nav_horizontal{
+      color:#ffffff;
+      margin:auto;
+    }
+    </style>
+    {% endblock %}
+
+<body>
+
+    <!-- Herança do popup de status  -->
+    {% block popup %}
+    {{ super() }}
+    {% endblock %}
+
+    <!-- Herança da navbar -->
+    {% block header %}
+    {{ super() }}
+    <!-- Herança do botão do carrinho (tá bugado, então vai herdar junto com o block header)-->
+
+    {% endblock %}
+
+  {% block main %}
+
+     <!-- Formatar o html e o css bonitinho -->
+
+     <h1 style="position: fixed;
+     margin-left: 18vw;
+     "> Sua conta - em construção</h1>
+     <br>
+     <div>
+       <div class="nav_horizontal">
+         <ul class="nav_horizontal">
+           <li class="nav_horizontal"><a class="nav_horizontal" href="/conta/change_data" target="frame">Alterar dados</a></li>
+           <li class="nav_horizontal"><a class="nav_horizontal" href="/conta/delete_user" target="frame">Deletar conta</a></li>
+           <li class="nav_horizontal"><a class="nav_horizontal" href="/conta/insert_payment" target="frame">Pagamento</a></li>
+           <!-- <li style="border: 1px solid #ffffff; height: 50px;display: flex;margin: auto;"></li>
+           <li style="border: 1px solid #ffffff; height: 50px;display: flex;margin: auto;"></li>
+           <li style="border: 1px solid #ffffff; height: 50px;display: flex;margin: auto;"></li>
+           <li style="border: 1px solid #ffffff; height: 50px;display: flex;margin: auto;"></li> -->
+           <li class="nav_horizontal"><a class="nav_horizontal" href="/logout">Sair</a></li>
+         </ul>
+       </div>
+
+       <div>
+          <iframe name="frame" src="/conta/change_data" width="1000vw" height="490vh"
+           frameborder="0" style="
+           background-color:transparent !important;
+           position:fixed;
+           top:19vh;
+           left:250px"
+           allowtransparency="true"
+           scrolling="no"</iframe>
+       </div>
+     </div>
+  {% endblock %}
+
+  <!-- Herança de informações de rodapé -->
+  {% block footer %}
+  {{ super() }}
+  {% endblock %}
+
+  <!-- Herança de scripts - global e pesquisar  -->
+  {% block scripts %}
+  {{ super() }}
+  {% endblock %}
+
+</body>
+</html>

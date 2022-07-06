@@ -1,0 +1,39 @@
+{% extends "configs_conta.html" %}
+
+    <!-- Herança da tag head - Incluso css global e imagem da logo  -->
+    {% block head %}
+    {{ super() }}
+    {% endblock %}
+
+<body>
+  {% block popup %}
+  {{ super() }}
+  {% endblock %}
+  {% block main %}
+    <div class="div_main">
+      <!-- Formatar o html e o css bonitinho -->
+      <h1> Alterar dados - em construção</h1>
+      
+
+      <form action="/conta/change_data" method="post">
+       <!-- <input type="text" name="username" placeholder="username">
+       <br> -->
+       <h3>Insira somente os dados que queira alterar:</h3>
+       <br>
+       <label>Insira o novo email
+       <input type="text" name="email" placeholder="Atual: {{current_user.id}}"></label>
+       <br>
+       <label>Insira a nova senha
+       <input type="password" name="senha" placeholder="Insira a senha"></label>
+       <br>
+       <!-- <span hidden="true"><input type="number" name="etapa_config" value="0001"></span> -->
+       <button type="submit" id="change_user_data" value="change_user_data">Alterar dados</button>
+      </form>
+    </div>
+  {% endblock %}
+
+  {% block scripts %}
+  {{ super() }}
+  {% endblock %}
+</body>
+</html>

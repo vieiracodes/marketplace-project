@@ -26,12 +26,16 @@ import psycopg2
 #arquivo de configuração de variáveis de ambiente e outros dados usados no programa
 from config import app_config, db_config, Config_email
 from Fórum.Fórum import Forum_thread
+from Login.Sua_conta.account import Account
 #Para tratamento de erros e exceções
+
+# Ver de importar apenas exceções específicas
 import werkzeug.exceptions
 import jinja2.exceptions
 
 
 #Importação de variáveis de ambiente e outras configurações, caso necessário
+# OPTIMIZE:
 is_validation = None
 verify_code = ''
 User_data = None
@@ -42,18 +46,26 @@ app = Flask(__name__,
 static_folder=app_config.static_folder,
 template_folder=app_config.template_folder)
 
+#Inicialização e configuração das extensões flask
 app.secret_key = app_config.secret_key
 login_manager = LoginManager()
+login_manager.login_view = 'login'
 login_manager.__init__(app)
 app.config.update(Config_email)
 mail = Mail(app)
 
+
+
+# Classe usada pelo Flask Login
 class User(UserMixin):
     pass
 
+# Classe para manipulação do banco de dados
 class Banco_de_dados():
     def __init__(self):
-        self.Auth_tokens = None
+        #Não colocar None pois senão a primeira carregada da página indica como
+        #como se houvesse um usuário logado já (Não entra como anônimo).
+        self.Auth_tokens = []
 
     #Conexão com o banco de dados
     def conectar_banco(self, platform="PostgreSQL"):
@@ -83,6 +95,7 @@ class Banco_de_dados():
             print('levantou a exceção interna')
             return None
 
+
     def inserir_user(self, User_data):
 
         #melhorar essa atribuição depois
@@ -93,6 +106,104 @@ class Banco_de_dados():
         add_User = 'INSERT INTO logins (Email, Senha) VALUES (%s, %s)'
         cursor.execute(add_User, User_data)
         self.comms.commit()
+
+
+                #-------------------<Contas>-------------------#
+
+    def alterar_user(self, **config_args):
+        #por algum motivo aqui dá erro se o self for chamado sem os parênteses
+        self.comms = self().conectar_banco()
+        cursor = self.comms.cursor()
+        callback_status = {'mensagem':None, 'redirecionamento':None}
+
+        novo_email = config_args["email"]
+        senha_input = config_args["senha"]
+        senha = None
+
+        Senha_hash = check_password_hash(self().verificar_user(current_user.id)[1], senha)
+        if(Senha_hash):
+            if(novo_email != ''):
+                alterar_dados = f"""UPDATE logins
+                SET Email='{novo_email}'
+                Where Email='{current_user.id}' """
+            elif(senha_input != ''):
+                senha_nova = generate_password_hash(senha_input, method ='sha256')
+                alterar_dados = f"""UPDATE logins
+                SET Senha='{senha_nova}'
+                Where Email='{current_user.id}' """
+
+            #Só pra fazer um envio ao servidor ao invés de envios de cada argumento separadamente
+            elif(novo_email != '' and senha_input != ''):
+                alterar_dados = f"""UPDATE logins
+                SET Email='{novo_email}', Senha='{senha_nova}'
+                Where Email='{current_user.id}' """
+
+            else:
+                callback_status['mensagem'] ='Algum valor de alteração precisa ser inserida!'
+                callback_status['redirecionamento'] = redirect(url_for('conta'))
+                self.comms.close()
+                return callback_status
+
+
+            cursor.execute(alterar_dados)
+            self.comms.commit()
+            callback_status['mensagem'] ='Dados alterados com sucesso!'
+        else:
+            callback_status['mensagem'] ='A senha de autenticação é inválida!'
+
+        callback_status['redirecionamento'] = redirect(url_for('conta_feature', recurso = 'change_data'))
+        self.comms.close()
+        return callback_status
+
+
+
+
+    def deletar_user(self, **config_args):
+        self.comms = self.conectar_banco(self, platform="PostgreSQL")
+        cursor = self.comms.cursor()
+        callback_status = {'mensagem':None, 'redirecionamento':None}
+
+        email = 'None' #current_user.id
+        senha = config_args["senha"]
+
+        #Senha_hash = check_password_hash(self.verificar_user(email)[1], senha)
+        Senha_hash = True
+        if(Senha_hash):
+            # deletar = f"DELETE FROM logins WHERE Email = {email}"
+            # cursor.execute(deletar)
+            # self.comms.close()
+            print(email)
+            callback_status['mensagem'] = 'Dados excluídos com sucesso!'
+            callback_status['redirecionamento'] = redirect(url_for('home'))
+
+            #Conferir isso aqui posteriormente
+            callback_status['is_target_top'] = True
+        else:
+            callback_status['mensagem'] ='Não foi possível deletar os dados. A senha de autenticação é inválida!'
+            callback_status['redirecionamento'] = redirect(url_for('conta_feature', recurso = 'delete_user'))
+            callback_status['is_target_top'] = False
+
+        self.comms.close()
+        return callback_status
+
+
+#EXPERIMENTAL - Para testes futuros
+    def insert_payment_method(self, **kwargs):
+        self.comms = self.conectar_banco(self, platform="PostgreSQL")
+        cursor = self.comms.cursor()
+        callback_status = {'mensagem':None, 'redirecionamento':None}
+
+        callback_status['mensagem'] ='Não implementado ainda'
+        callback_status['redirecionamento'] = redirect(url_for('conta_feature', recurso = 'insert_payment'))
+        # callback_status['redirecionamento'] = redirect(url_for('conta'))
+        print(callback_status['redirecionamento'])
+        print()
+        print(type(callback_status['redirecionamento']))
+        self.comms.close()
+        return callback_status
+
+
+
 
     #Operação para verificar todos os logins
     #NÂO UTILIZAR EM AMBIENTE DE PRODUÇÂO
@@ -134,7 +245,7 @@ forum_methods = Forum_thread()
 
 #decoradores de user_loader e request_loader, usados pelo flask_login
 @login_manager.user_loader
-def user_loader(email):
+def load_user(email):
     if(db.Auth_tokens != None):
         if email not in db.Auth_tokens:
             return
@@ -183,6 +294,7 @@ def cadastro():
                 html= render_template('landing_pages/html/corpo_email.html', verify_code=verify_code)
                 )
                 mail.send(msg)
+
 
                 User_data = (email, Senha)
 
@@ -247,7 +359,7 @@ def cadastro():
 #Ler dados de usuário no banco de dados
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
-    lembra_user = False
+    #lembra_user = False
     if(request.method == 'POST'):
         email = request.form['email']
         Senha = request.form['password']
@@ -261,7 +373,7 @@ def login():
                 if(Senha_hash == True):
                     User_token = User()
                     User_token.id = email
-                    login_user(User_token, remember=lembra_user)
+                    login_user(User_token)#, remember=lembra_user)
 
                     flash('Login concluído!')
                     #popup flash nessa página
@@ -272,7 +384,7 @@ def login():
                     #popup flash nessa página
                     return redirect(url_for('login'))
 
-            #se Auth_tokens == None
+            #se Auth_tokens == []
             else:
 
             #enviar um popup
@@ -287,32 +399,28 @@ def login():
 
         #encerra a comunicação com o banco de dados independente do resultado
         finally:
-
             db.comms.close()
 
     else:
         return render_template('landing_pages/html/login.html')
 
 @app.route('/logout', methods = ['GET','POST'])
+@login_required
 def logout():
     logout_user()
+    db.Auth_tokens = []
     #enviar um popup
     flash('Conta desconectada com sucesso!')
     #popup flash nessa página
     return redirect(url_for('home'))
 
-#-----------------------------------<Erros>------------------------------------#
+@login_manager.unauthorized_handler
+def not_logged():
+    flash('Você precisa estar logado para acessar essa página!')
+    return redirect(url_for('home'))
 
-# #Página de erro - Trocar no futuro por popups flash
-# @app.route('/error', methods = ['GET', 'POST'])
-# def error():
-#
-#     try:
-#         error = request.args['error']
-#     except:
-#         error = 'O erro deu erro :D'
-#
-#     return render_template('error.html', error=error)
+
+#-----------------------------------<Erros>------------------------------------#
 
 def alter_code(e):
     global status_code
@@ -335,6 +443,7 @@ app.register_error_handler(401, alter_code)
 app.register_error_handler(403, alter_code)
 app.register_error_handler(404, alter_code)
 app.register_error_handler(405, alter_code)
+app.register_error_handler(406, alter_code)
 app.register_error_handler(410, alter_code)
 
 #Erros de servidor
@@ -350,12 +459,22 @@ app.register_error_handler(505, alter_code)
 @app.route('/', methods = ['GET', 'POST'])
 def home():
 
+#Teste pra ver se tá logando
+    print(db.Auth_tokens)
+    print(f'current_user: {current_user}')
+    try:
+        print(f'Id: {current_user.id}')
+    except AttributeError:
+        pass
+    print(f'Ativo?: {current_user.is_active}')
+    print(f'Autenticado?: {current_user.is_authenticated}')
+    print(f'Anônimo?: {current_user.is_anonymous}')
+
+
     #Sugestões de autocomplete na barra de pesquisa
     sugestions = ['PS4', 'PS3', 'PlayStation4', 'PlayStation3', 'PlayStation',
     'Xbox One', 'Xbox360', 'Xbox', 'Switch', 'Nintendo Switch', 'Nintendo', '3DS',
     'Nintendo 3DS']
-
-
 
         #Elementos que podem ser enviados ao banco de dados:
             #Produto (Título) - Ok
@@ -387,24 +506,20 @@ def carrinho():
 def forum():
     sugestions = ['salve', 'aoba', 'teste1']
     threads = forum_methods.Get_threads()
-    # print(f'Anônimo?: {current_user.is_anonymous}')
-
-
-    #comms = conectar_banco()
-    #cursor = comms.cursor()
     #Elementos que podem ser enviados ao banco de dados:
         #Perguntas (Título) - OK
         #Perguntas (Explicação) - OK
         #Respostas - OK
         #Estado do 'post'/pergunta(aberto, encerrado) - OK
-        #Usuários que publicaram perguntas e respostas
+        #Usuários que publicaram perguntas e respostas- OK
 
-        #verificar autorização do usuário (se pode postar ou responder)
+        #verificar autorização do usuário (se pode postar ou responder)- OK
         #Usar o current_user.is_authenticated
 
     return render_template('landing_pages/html/forum.html', sugestions=sugestions,
     threads=threads)
 
+# Criar threads (ou tópicos)
 @app.route('/forum/criar_thread', methods =['GET','POST'])
 def criar_thread():
     sugestions = ['salve', 'aoba', 'teste1']
@@ -420,17 +535,15 @@ def criar_thread():
             else:
                 flash('Faça login para poder abrir threads!')
                 return redirect(url_for('forum'))
-
     return render_template('landing_pages/html/criar_thread.html',sugestions=sugestions)
 
+# Deletar threads
 @app.route('/forum/delete_comment/<string:num_thread>/<string:thread_escolhida>/<string:num_post>', methods =['POST'])
 def delete_comment(num_thread, thread_escolhida, num_post):
     forum_methods.Excluir_comment(num_thread, num_post)
     return redirect(url_for('forum_thread',thread_escolhida=thread_escolhida, num_thread=num_thread))
 
-
-
-
+# Link das threads em específico
 @app.route('/forum/<string:num_thread>/<string:thread_escolhida>', methods = ['GET', 'POST'])
 def forum_thread(num_thread, thread_escolhida):
     # thread será um modelo básico, que será completado com os dados do fórum,
@@ -463,7 +576,7 @@ def forum_thread(num_thread, thread_escolhida):
 
                     #Pensar numa maneira mais eficiente de fazer isso
                     #atualmente, está fazendo pela rota delete_comment
-                    
+
                     # elif(request.form.get('excluir', 'None') == 'excluir_comentário'):
                     #     forum_methods.Excluir_comment(request.form['excluir'])
 
@@ -499,6 +612,50 @@ def forum_thread(num_thread, thread_escolhida):
     except KeyError:
          return render_template('landing_pages/html/page_error_forum.html', status_code='410',
          complete_status= f'410 - Página não existe', detalhamento='O tópico procurado pode ter sido excluido')
+
+
+#------------------------------------<Conta>-----------------------------------#
+@app.route('/conta', methods = ['POST', 'GET'])
+# @login_required
+def conta():
+    if (request.method == 'POST'):
+        pass
+
+
+    return render_template(f'landing_pages/html/conta.html')
+
+
+#
+@app.route('/conta/<string:recurso>', methods = ['POST', 'GET'])
+# @login_required
+def conta_feature(recurso):
+
+    if (request.method == 'POST'):
+        config_args = request.form
+
+        # for valor_legal in request.form:
+        #     print(f'{valor_legal}: {request.form.get(valor_legal)}')
+
+        #Tomar muito cuidado com o eval
+
+
+        callback_eval = eval(Account().account_config(recurso))
+        #,{'__builtins__': {'getattr': getattr,
+        #'Banco_de_dados': Banco_de_dados,
+        #'config_args':config_args}})
+
+
+        # print(callback_eval)
+        # print(f'Mensagem: {callback_eval["mensagem"]}')
+        print(f'Redirecionamento: {callback_eval["redirecionamento"]}')
+        # print('epa')
+        flash(callback_eval["mensagem"])
+
+        return callback_eval["redirecionamento"]
+    else:
+        callback_eval = {'mensagem':None, 'redirecionamento':None}
+
+    return render_template(f'landing_pages/html/pag_conta/{recurso}.html', callback_eval=callback_eval)
 
 
 #------------------------------<Testes e devtools>-----------------------------#
@@ -544,4 +701,4 @@ def teste():
 #rodar esse arquivo python
 
 if (__name__ == '__main__'):
-    app.run(debug= True)#, host = "0.0.0.0")
+    app.run(debug= True, host = "0.0.0.0")

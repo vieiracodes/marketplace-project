@@ -1,0 +1,34 @@
+{% extends "configs_conta.html" %}
+
+    <!-- Herança da tag head - Incluso css global e imagem da logo  -->
+    {% block head %}
+    {{ super() }}
+    {% endblock %}
+
+<body>
+  {% block main %}
+    <div class="div_main">
+      <!-- Formatar o html e o css bonitinho -->
+      <h1> Inserir forma de pagamento - em construção</h1>
+      <h2>{{MSG_BETA}}</h2>
+      <br>
+
+      <form action="/conta/insert_payment" method="post">
+       <!-- <input type="text" name="username" placeholder="username">
+       <br> -->
+       <input type="text" name="email" placeholder="{{current_user.id}}">
+       <br>
+       <label>Insira a senha:
+       <input type="password" name="senha" placeholder="senha"></label>
+       <br>
+
+       <button type="submit" id="change_user_data" value="change_user_data">Alterar dados</button>
+      </form>
+    </div>
+  {% endblock %}
+
+  {% block scripts %}
+  {{ super() }}
+  {% endblock %}
+</body>
+</html>
