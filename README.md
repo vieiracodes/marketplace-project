@@ -23,6 +23,8 @@ Observação 2: O projeto é um teste de conceito e pode não conter práticas d
 * [Demonstração](#demonstração)
 * [Pré Requisitos](#pré-requisitos)
     * [Passos comuns ao modo local e online](passos-comuns-ao-modo-local-e-online)
+    * [Para rodar o site localmente](para-rodar-o-site-localmente)
+    * [Para rodar o site de forma online](para-rodar-o-site-de-forma-online)
 * [Tecnologias](#tecnologias)
 * [Autores](#autores)
 
